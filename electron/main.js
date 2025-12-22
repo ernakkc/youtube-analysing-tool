@@ -211,8 +211,19 @@ ipcMain.handle('start-analysis', async (event, queries) => {
   if (analysisInProgress) {
     return { success: false, error: 'Analiz zaten çalışıyor' };
   }
+  
+  // API key kontrolü
+  if (!process.env.YOUTUBE_API_KEY && !process.env.YOUTUBE_API_KEY_1) {
+    sendLog('error', '❌ YouTube API anahtarı bulunamadı!');
+    sendLog('warning', '⚠️  Lütfen Settings sekmesinden en az 1 API key ekleyin ve Kaydet butonuna tıklayın.');
+    return { 
+      success: false, 
+      error: 'API anahtarı bulunamadı. Settings sekmesinden API key ekleyin.' 
+    };
+  }
 
   analysisInProgress = true;
+  shouldStopAnalysis = false; // Reset stop flag
   
   try {
     sendLog('info', '🚀 Analiz başlatıldı...');

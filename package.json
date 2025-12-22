@@ -11,6 +11,7 @@
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
     "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --mac --win --linux",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,10 @@
     "url": "git+https://github.com/ernakkc/youtube-analysing-tool.git"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Eren Akkoç",
+    "email": "ern.akkc@gmail.com"
+  },
   "license": "ISC",
   "type": "commonjs",
   "bugs": {

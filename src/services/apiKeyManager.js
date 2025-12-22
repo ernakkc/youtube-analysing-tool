@@ -10,7 +10,10 @@ class ApiKeyManager {
     this.failedKeys = new Set();
     
     if (this.keys.length === 0) {
-      throw new Error('.env dosyasında YouTube API anahtarı bulunamadı. Lütfen YOUTUBE_API_KEY veya YOUTUBE_API_KEY_1, YOUTUBE_API_KEY_2 vb. ayarlayın');
+      console.error('❌ YouTube API anahtarı bulunamadı!');
+      console.error('Electron uygulamasında: Settings sekmesinden API key ekleyin');
+      console.error('CLI modunda: .env dosyasına YOUTUBE_API_KEY ekleyin');
+      throw new Error('YouTube API anahtarı bulunamadı. Lütfen Settings sekmesinden API key ekleyin.');
     }
     
     console.log(`📌 API Anahtar Yöneticisi ${this.keys.length} anahtar ile başlatıldı`);

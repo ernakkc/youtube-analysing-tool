@@ -1,4 +1,10 @@
-require('dotenv').config();
+// .env dosyası varsa yükle (CLI modu için), yoksa devam et (Electron modu)
+try {
+  require('dotenv').config();
+} catch (error) {
+  // Electron modunda .env olmayabilir, bu normal
+  console.log('ℹ️  .env dosyası bulunamadı, environment variables kullanılacak');
+}
 
 // Çoklu API anahtarlarını environment'tan ayrıştır
 function parseApiKeys() {
