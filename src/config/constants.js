@@ -3,7 +3,6 @@ try {
   require('dotenv').config();
 } catch (error) {
   // Electron modunda .env olmayabilir, bu normal
-  console.log('ℹ️  .env dosyası bulunamadı, environment variables kullanılacak');
 }
 
 // Çoklu API anahtarlarını environment'tan ayrıştır

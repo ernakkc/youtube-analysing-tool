@@ -167,27 +167,20 @@ ipcMain.handle('save-settings', async (event, settings) => {
  * Environment variables'ı güncelle
  */
 function updateEnvironmentVariables(settings) {
-  console.log('🔧 Updating environment variables...');
-  console.log('📋 Settings:', JSON.stringify(settings, null, 2));
-  
   // API Keys - hem YOUTUBE_API_KEY_1, _2 hem de YOUTUBE_API_KEY set et
   if (settings.apiKeys && settings.apiKeys.length > 0) {
     // İlk key'i YOUTUBE_API_KEY olarak da set et (backward compatibility)
     const firstValidKey = settings.apiKeys.find(k => k && k.trim());
     if (firstValidKey) {
       process.env.YOUTUBE_API_KEY = firstValidKey;
-      console.log('✅ YOUTUBE_API_KEY set edildi');
     }
     
     // Her key'i numaralı olarak set et
     settings.apiKeys.forEach((key, index) => {
       if (key && key.trim()) {
         process.env[`YOUTUBE_API_KEY_${index + 1}`] = key;
-        console.log(`✅ YOUTUBE_API_KEY_${index + 1} set edildi`);
       }
     });
-  } else {
-    console.log('⚠️  API keys bulunamadı!');
   }
   
   // Filters - null check ekle
@@ -225,11 +218,6 @@ ipcMain.handle('start-analysis', async (event, queries) => {
   
   // API key kontrolü
   if (!process.env.YOUTUBE_API_KEY && !process.env.YOUTUBE_API_KEY_1) {
-    console.log('❌ API Key Check Failed:');
-    console.log('   YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY);
-    console.log('   YOUTUBE_API_KEY_1:', process.env.YOUTUBE_API_KEY_1);
-    console.log('   All env keys:', Object.keys(process.env).filter(k => k.includes('YOUTUBE')));
-    
     sendLog('error', '❌ YouTube API anahtarı bulunamadı!');
     sendLog('warning', '⚠️  Lütfen Settings sekmesinden en az 1 API key ekleyin ve Kaydet butonuna tıklayın.');
     return { 
