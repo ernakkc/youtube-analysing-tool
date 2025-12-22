@@ -21,6 +21,29 @@ let analysisInProgress = false;
 let shouldStopAnalysis = false;
 
 /**
+ * Başlangıçta config'i yükle ve environment variables'ı set et
+ */
+async function loadInitialConfig() {
+  try {
+    const configPath = path.join(app.getPath('userData'), 'config.json');
+    
+    if (fs.existsSync(configPath)) {
+      const data = fs.readFileSync(configPath, 'utf8');
+      const settings = JSON.parse(data);
+      updateEnvironmentVariables(settings);
+      console.log('✅ Config yüklendi ve environment variables set edildi');
+    } else {
+      // Varsayılan olarak boş API key set et (hata vermemesi için)
+      process.env.YOUTUBE_API_KEY = '';
+      console.log('⚠️  Config dosyası bulunamadı, Settings sekmesinden API key ekleyin');
+    }
+  } catch (error) {
+    console.error('❌ Config yüklenirken hata:', error);
+    process.env.YOUTUBE_API_KEY = ''; // Fallback
+  }
+}
+
+/**
  * Ana pencereyi oluştur
  */
 function createWindow() {
@@ -57,7 +80,10 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  await loadInitialConfig();
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -141,12 +167,21 @@ ipcMain.handle('save-settings', async (event, settings) => {
  * Environment variables'ı güncelle
  */
 function updateEnvironmentVariables(settings) {
-  // API Keys
-  settings.apiKeys.forEach((key, index) => {
-    if (key) {
-      process.env[`YOUTUBE_API_KEY_${index + 1}`] = key;
+  // API Keys - hem YOUTUBE_API_KEY_1, _2 hem de YOUTUBE_API_KEY set et
+  if (settings.apiKeys && settings.apiKeys.length > 0) {
+    // İlk key'i YOUTUBE_API_KEY olarak da set et (backward compatibility)
+    const firstValidKey = settings.apiKeys.find(k => k && k.trim());
+    if (firstValidKey) {
+      process.env.YOUTUBE_API_KEY = firstValidKey;
     }
-  });
+    
+    // Her key'i numaralı olarak set et
+    settings.apiKeys.forEach((key, index) => {
+      if (key && key.trim()) {
+        process.env[`YOUTUBE_API_KEY_${index + 1}`] = key;
+      }
+    });
+  }
   
   // Filters
   process.env.MIN_SUBSCRIBERS = settings.filters.minSubscribers.toString();
