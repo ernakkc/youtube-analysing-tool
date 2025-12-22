@@ -167,40 +167,51 @@ ipcMain.handle('save-settings', async (event, settings) => {
  * Environment variables'ı güncelle
  */
 function updateEnvironmentVariables(settings) {
+  console.log('🔧 Updating environment variables...');
+  console.log('📋 Settings:', JSON.stringify(settings, null, 2));
+  
   // API Keys - hem YOUTUBE_API_KEY_1, _2 hem de YOUTUBE_API_KEY set et
   if (settings.apiKeys && settings.apiKeys.length > 0) {
     // İlk key'i YOUTUBE_API_KEY olarak da set et (backward compatibility)
     const firstValidKey = settings.apiKeys.find(k => k && k.trim());
     if (firstValidKey) {
       process.env.YOUTUBE_API_KEY = firstValidKey;
+      console.log('✅ YOUTUBE_API_KEY set edildi');
     }
     
     // Her key'i numaralı olarak set et
     settings.apiKeys.forEach((key, index) => {
       if (key && key.trim()) {
         process.env[`YOUTUBE_API_KEY_${index + 1}`] = key;
+        console.log(`✅ YOUTUBE_API_KEY_${index + 1} set edildi`);
       }
     });
+  } else {
+    console.log('⚠️  API keys bulunamadı!');
   }
   
-  // Filters
-  process.env.MIN_SUBSCRIBERS = settings.filters.minSubscribers.toString();
-  process.env.MAX_SUBSCRIBERS = settings.filters.maxSubscribers.toString();
-  process.env.MAX_DAYS_SINCE_UPLOAD = settings.filters.maxDaysSinceUpload.toString();
-  process.env.MIN_VIDEO_DURATION_MINUTES = settings.filters.minVideoDuration.toString();
-  process.env.MIN_VIDEO_VIEWS = settings.filters.minVideoViews.toString();
-  process.env.SHORTS_THRESHOLD_PERCENTAGE = settings.filters.shortsThreshold.toString();
+  // Filters - null check ekle
+  if (settings.filters) {
+    process.env.MIN_SUBSCRIBERS = (settings.filters.minSubscribers || 10000).toString();
+    process.env.MAX_SUBSCRIBERS = (settings.filters.maxSubscribers || 500000).toString();
+    process.env.MAX_DAYS_SINCE_UPLOAD = (settings.filters.maxDaysSinceUpload || 30).toString();
+    process.env.MIN_VIDEO_DURATION_MINUTES = (settings.filters.minVideoDuration || 3).toString();
+    process.env.MIN_VIDEO_VIEWS = (settings.filters.minVideoViews || 1000).toString();
+    process.env.SHORTS_THRESHOLD_PERCENTAGE = (settings.filters.shortsThreshold || 60).toString();
+  }
   
-  // Discovery
-  process.env.DEFAULT_REGION_CODE = settings.discovery.regionCode;
-  process.env.DEFAULT_LANGUAGE = settings.discovery.language;
-  process.env.MAX_RESULTS_PER_QUERY = settings.discovery.maxResults.toString();
+  // Discovery - null check ekle
+  if (settings.discovery) {
+    process.env.DEFAULT_REGION_CODE = settings.discovery.regionCode || 'TR';
+    process.env.DEFAULT_LANGUAGE = settings.discovery.language || 'tr';
+    process.env.MAX_RESULTS_PER_QUERY = (settings.discovery.maxResults || 50).toString();
+  }
   
-  // Delays
+  // Delays - null check ekle
   if (settings.delays) {
-    process.env.DELAY_BETWEEN_QUERIES = settings.delays.betweenQueries.toString();
-    process.env.DELAY_BETWEEN_CHANNELS = settings.delays.betweenChannels.toString();
-    process.env.DELAY_AFTER_API_ERROR = settings.delays.afterApiError.toString();
+    process.env.DELAY_BETWEEN_QUERIES = (settings.delays.betweenQueries || 5000).toString();
+    process.env.DELAY_BETWEEN_CHANNELS = (settings.delays.betweenChannels || 1000).toString();
+    process.env.DELAY_AFTER_API_ERROR = (settings.delays.afterApiError || 3000).toString();
   }
 }
 
@@ -214,6 +225,11 @@ ipcMain.handle('start-analysis', async (event, queries) => {
   
   // API key kontrolü
   if (!process.env.YOUTUBE_API_KEY && !process.env.YOUTUBE_API_KEY_1) {
+    console.log('❌ API Key Check Failed:');
+    console.log('   YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY);
+    console.log('   YOUTUBE_API_KEY_1:', process.env.YOUTUBE_API_KEY_1);
+    console.log('   All env keys:', Object.keys(process.env).filter(k => k.includes('YOUTUBE')));
+    
     sendLog('error', '❌ YouTube API anahtarı bulunamadı!');
     sendLog('warning', '⚠️  Lütfen Settings sekmesinden en az 1 API key ekleyin ve Kaydet butonuna tıklayın.');
     return { 
