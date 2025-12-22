@@ -1,77 +1,18 @@
 {
   "channels": [
     {
-      "channelId": "UCyolRRmdu-_9DRhVYyoPndA",
-      "channelUrl": "https://youtube.com/channel/UCyolRRmdu-_9DRhVYyoPndA",
-      "title": "SilverFinish",
-      "subscriberCount": 113000,
-      "last6Views": [
-        59650,
-        20483,
-        16681,
-        30133,
-        26618,
-        389126
-      ],
-      "detectedGames": [
-        "gta",
-        "gta5"
-      ],
-      "qualityScore": 90,
-      "scoreBreakdown": {
-        "viewReliability": 30,
-        "avgViewPower": 25,
-        "activity": 20,
-        "gamingFit": 15
-      },
-      "metrics": {
-        "viewRatio": "1.1887",
-        "longVideosCount": 4,
-        "avgViews": 134329
-      },
-      "lastCheckedAt": "2025-12-22T19:39:25.979Z"
-    },
-    {
-      "channelId": "UC3nKey6FRCxXUPmzOXNJnuw",
-      "channelUrl": "https://youtube.com/channel/UC3nKey6FRCxXUPmzOXNJnuw",
-      "title": "GTA Blade",
-      "subscriberCount": 129000,
-      "last6Views": [
-        11496,
-        21764,
-        44083,
-        89369,
-        77910,
-        52906
-      ],
-      "detectedGames": [
-        "gta",
-        "gta5"
-      ],
-      "qualityScore": 100,
-      "scoreBreakdown": {
-        "viewReliability": 30,
-        "avgViewPower": 25,
-        "activity": 20,
-        "gamingFit": 25
-      },
-      "metrics": {
-        "viewRatio": "0.8225",
-        "longVideosCount": 10,
-        "avgViews": 106097
-      },
-      "lastCheckedAt": "2025-12-22T20:47:13.056Z"
-    },
-    {
       "channelId": "UCPR-gu1mkHHP-vippRMlLjg",
       "channelUrl": "https://youtube.com/channel/UCPR-gu1mkHHP-vippRMlLjg",
       "title": "Semih Biçer",
       "subscriberCount": 213000,
+      "emails": [
+        "semihbicer.yt@gmail.com"
+      ],
       "last6Views": [
-        25479,
-        46728,
-        29811,
-        38298,
+        25493,
+        46761,
+        29820,
+        38307,
         25687,
         13117
       ],
@@ -89,70 +30,23 @@
       "metrics": {
         "viewRatio": "0.1700",
         "longVideosCount": 7,
-        "avgViews": 36208
+        "avgViews": 36217
       },
-      "lastCheckedAt": "2025-12-22T22:10:18.615Z",
-      "emails": [
-        "semihbicer.yt@gmail.com"
-      ]
-    },
-    {
-      "channelId": "UC1BZdzWiOPY6Mp9hGmj39uA",
-      "channelUrl": "https://youtube.com/channel/UC1BZdzWiOPY6Mp9hGmj39uA",
-      "title": "Egoist Pati GTA",
-      "subscriberCount": 10000,
-      "last6Views": [
-        2590,
-        7891,
-        10173,
-        2890,
-        7674,
-        9271
-      ],
-      "detectedGames": [
-        "gta",
-        "gta5"
-      ],
-      "qualityScore": 90,
-      "scoreBreakdown": {
-        "viewReliability": 30,
-        "avgViewPower": 25,
-        "activity": 20,
-        "gamingFit": 15
-      },
-      "metrics": {
-        "viewRatio": "0.8598",
-        "longVideosCount": 8,
-        "avgViews": 8598
-      },
-      "lastCheckedAt": "2025-12-22T20:47:14.488Z"
-    },
-    {
-      "channelId": "UCGhZNU3CHCUXnUvkYjgmNdA",
-      "channelUrl": "https://youtube.com/channel/UCGhZNU3CHCUXnUvkYjgmNdA",
-      "title": "NECO",
-      "subscriberCount": 25100,
-      "last6Views": [
-        1078,
-        1224,
-        1285,
-        1273,
-        1329,
-        1249
-      ]
+      "lastCheckedAt": "2025-12-22T22:33:21.335Z"
     },
     {
       "channelId": "UCgkaQCepRkmCxRs-6SGvHCA",
       "channelUrl": "https://youtube.com/channel/UCgkaQCepRkmCxRs-6SGvHCA",
       "title": "Ceyto",
       "subscriberCount": 152000,
+      "emails": [],
       "last6Views": [
         566,
-        10917,
+        10965,
         13559,
         11364,
         10227,
-        14162
+        14196
       ],
       "detectedGames": [
         "gta",
@@ -168,18 +62,50 @@
       "metrics": {
         "viewRatio": "0.1548",
         "longVideosCount": 8,
-        "avgViews": 23530
+        "avgViews": 23534
       },
-      "lastCheckedAt": "2025-12-22T22:10:20.203Z",
-      "emails": []
+      "lastCheckedAt": "2025-12-22T22:33:22.967Z"
+    },
+    {
+      "channelId": "UCs5YrfOxcG3V0h8tfJBPTcw",
+      "channelUrl": "https://youtube.com/channel/UCs5YrfOxcG3V0h8tfJBPTcw",
+      "title": "Alejandro",
+      "subscriberCount": 108000,
+      "emails": [],
+      "last6Views": [
+        2676,
+        534,
+        2691,
+        877,
+        3309,
+        6501
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 61,
+      "scoreBreakdown": {
+        "viewReliability": 20,
+        "avgViewPower": 6,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.0259",
+        "longVideosCount": 9,
+        "avgViews": 2796
+      },
+      "lastCheckedAt": "2025-12-22T22:33:27.275Z"
     },
     {
       "channelId": "UCCwQbbp4uX5o4ahnqMcmaJg",
       "channelUrl": "https://youtube.com/channel/UCCwQbbp4uX5o4ahnqMcmaJg",
       "title": "Kenan Karanfil",
       "subscriberCount": 20400,
+      "emails": [],
       "last6Views": [
-        890,
+        891,
         2381,
         3194,
         1290,
@@ -200,42 +126,9 @@
       "metrics": {
         "viewRatio": "0.0873",
         "longVideosCount": 10,
-        "avgViews": 1781
+        "avgViews": 1782
       },
-      "lastCheckedAt": "2025-12-22T22:10:24.201Z",
-      "emails": []
-    },
-    {
-      "channelId": "UCs5YrfOxcG3V0h8tfJBPTcw",
-      "channelUrl": "https://youtube.com/channel/UCs5YrfOxcG3V0h8tfJBPTcw",
-      "title": "Alejandro",
-      "subscriberCount": 108000,
-      "last6Views": [
-        2669,
-        528,
-        2660,
-        877,
-        3309,
-        6486
-      ],
-      "detectedGames": [
-        "gta",
-        "gta5"
-      ],
-      "qualityScore": 61,
-      "scoreBreakdown": {
-        "viewReliability": 20,
-        "avgViewPower": 6,
-        "activity": 20,
-        "gamingFit": 15
-      },
-      "metrics": {
-        "viewRatio": "0.0258",
-        "longVideosCount": 9,
-        "avgViews": 2792
-      },
-      "lastCheckedAt": "2025-12-22T22:10:23.390Z",
-      "emails": []
+      "lastCheckedAt": "2025-12-22T22:33:28.801Z"
     },
     {
       "channelId": "UCAuR-yXG5XLES86HA6XZR_A",
@@ -246,8 +139,8 @@
         "iletisimmonchayi@gmail.com"
       ],
       "last6Views": [
-        14543,
-        47489,
+        14604,
+        47492,
         37523,
         54924,
         62078,
@@ -267,9 +160,512 @@
       "metrics": {
         "viewRatio": "0.6968",
         "longVideosCount": 10,
-        "avgViews": 105215
+        "avgViews": 105221
       },
-      "lastCheckedAt": "2025-12-22T22:10:31.516Z"
+      "lastCheckedAt": "2025-12-22T22:33:39.462Z"
+    },
+    {
+      "channelId": "UC3nKey6FRCxXUPmzOXNJnuw",
+      "channelUrl": "https://youtube.com/channel/UC3nKey6FRCxXUPmzOXNJnuw",
+      "title": "GTA Blade",
+      "subscriberCount": 129000,
+      "emails": [],
+      "last6Views": [
+        11737,
+        21957,
+        44191,
+        89369,
+        78017,
+        52915
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 100,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.8236",
+        "longVideosCount": 10,
+        "avgViews": 106248
+      },
+      "lastCheckedAt": "2025-12-22T22:33:53.057Z"
+    },
+    {
+      "channelId": "UC1BZdzWiOPY6Mp9hGmj39uA",
+      "channelUrl": "https://youtube.com/channel/UC1BZdzWiOPY6Mp9hGmj39uA",
+      "title": "Egoist Pati GTA",
+      "subscriberCount": 10000,
+      "emails": [],
+      "last6Views": [
+        4214,
+        7950,
+        10173,
+        2898,
+        7686,
+        9282
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 90,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.8610",
+        "longVideosCount": 8,
+        "avgViews": 8610
+      },
+      "lastCheckedAt": "2025-12-22T22:33:53.497Z"
+    },
+    {
+      "channelId": "UCGhZNU3CHCUXnUvkYjgmNdA",
+      "channelUrl": "https://youtube.com/channel/UCGhZNU3CHCUXnUvkYjgmNdA",
+      "title": "NECO",
+      "subscriberCount": 25100,
+      "emails": [
+        "zeon@temgaming.com"
+      ],
+      "last6Views": [
+        1120,
+        1233,
+        1292,
+        1282,
+        1335,
+        1251
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5",
+        "grand theft auto",
+        "valorant",
+        "lol"
+      ],
+      "qualityScore": 87,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 12,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.0539",
+        "longVideosCount": 10,
+        "avgViews": 1354
+      },
+      "lastCheckedAt": "2025-12-22T22:33:53.995Z"
+    },
+    {
+      "channelId": "UC4Slh6Ens8uxLuyFShRUQdA",
+      "channelUrl": "https://youtube.com/channel/UC4Slh6Ens8uxLuyFShRUQdA",
+      "title": "GTA Rogue",
+      "subscriberCount": 184000,
+      "emails": [],
+      "last6Views": [
+        56208,
+        32496,
+        42057,
+        43180,
+        45637,
+        86323
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 88,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 8,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.2393",
+        "longVideosCount": 10,
+        "avgViews": 44034
+      },
+      "lastCheckedAt": "2025-12-22T22:33:54.855Z"
+    },
+    {
+      "channelId": "UCoAHd_Zm_gT_eS2eGhv_HWQ",
+      "channelUrl": "https://youtube.com/channel/UCoAHd_Zm_gT_eS2eGhv_HWQ",
+      "title": "DNZY - Deniz Yukarıçukur",
+      "subscriberCount": 492000,
+      "emails": [],
+      "last6Views": [
+        558,
+        1324,
+        2371,
+        4309,
+        3575,
+        1115
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 55,
+      "scoreBreakdown": {
+        "viewReliability": 20,
+        "avgViewPower": 0,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.0037",
+        "longVideosCount": 10,
+        "avgViews": 1816
+      },
+      "lastCheckedAt": "2025-12-22T22:34:01.676Z"
+    },
+    {
+      "channelId": "UCRYnloqXpa_amxp_IUSRa-w",
+      "channelUrl": "https://youtube.com/channel/UCRYnloqXpa_amxp_IUSRa-w",
+      "title": "Gta Tv Official Channel",
+      "subscriberCount": 245000,
+      "emails": [],
+      "last6Views": [
+        4608,
+        4737,
+        13132,
+        16854,
+        5380,
+        22427
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5",
+        "grand theft auto",
+        "pes"
+      ],
+      "qualityScore": 81,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 6,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.0444",
+        "longVideosCount": 6,
+        "avgViews": 10872
+      },
+      "lastCheckedAt": "2025-12-22T22:34:07.850Z"
+    },
+    {
+      "channelId": "UCHa0jpbaRolbOOCAMhP54pQ",
+      "channelUrl": "https://youtube.com/channel/UCHa0jpbaRolbOOCAMhP54pQ",
+      "title": "INTER",
+      "subscriberCount": 479000,
+      "emails": [
+        "mail.intergta@gmail.com"
+      ],
+      "last6Views": [
+        631624,
+        863066,
+        2266108,
+        327850,
+        85660,
+        205622
+      ],
+      "detectedGames": [
+        "gta",
+        "grand theft auto",
+        "red dead redemption",
+        "gta5",
+        "rdr2"
+      ],
+      "qualityScore": 95,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 15,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "1.0681",
+        "longVideosCount": 10,
+        "avgViews": 511607
+      },
+      "lastCheckedAt": "2025-12-22T22:34:08.431Z"
+    },
+    {
+      "channelId": "UCEJoBOHgZag-SMTGLsPRbuA",
+      "channelUrl": "https://youtube.com/channel/UCEJoBOHgZag-SMTGLsPRbuA",
+      "title": "GTA expert",
+      "subscriberCount": 35700,
+      "emails": [],
+      "last6Views": [
+        4025,
+        11976,
+        967,
+        91074,
+        3211,
+        411709
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5",
+        "grand theft auto",
+        "rdr2",
+        "red dead redemption",
+        "forza horizon",
+        "need for speed"
+      ],
+      "qualityScore": 90,
+      "scoreBreakdown": {
+        "viewReliability": 25,
+        "avgViewPower": 25,
+        "activity": 15,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "1.8498",
+        "longVideosCount": 8,
+        "avgViews": 66040
+      },
+      "lastCheckedAt": "2025-12-22T22:34:09.865Z"
+    },
+    {
+      "channelId": "UCFiHjGyrJux8Rt4e6mUPU-w",
+      "channelUrl": "https://youtube.com/channel/UCFiHjGyrJux8Rt4e6mUPU-w",
+      "title": "GTAVIoclock",
+      "subscriberCount": 270000,
+      "emails": [],
+      "last6Views": [
+        6946,
+        7964,
+        14280,
+        3240,
+        4227,
+        3437
+      ],
+      "detectedGames": [
+        "gta",
+        "grand theft auto"
+      ],
+      "qualityScore": 81,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 6,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.0353",
+        "longVideosCount": 6,
+        "avgViews": 9531
+      },
+      "lastCheckedAt": "2025-12-22T22:34:12.744Z"
+    },
+    {
+      "channelId": "UCBvkOBLsSj9kusGYlroQkBg",
+      "channelUrl": "https://youtube.com/channel/UCBvkOBLsSj9kusGYlroQkBg",
+      "title": "Mr Xpart GTA",
+      "subscriberCount": 154000,
+      "emails": [
+        "gtamimofficial@gmail.com"
+      ],
+      "last6Views": [
+        35350,
+        45123,
+        67405,
+        87367,
+        83739,
+        37999
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5",
+        "grand theft auto",
+        "pes"
+      ],
+      "qualityScore": 100,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.5871",
+        "longVideosCount": 10,
+        "avgViews": 90418
+      },
+      "lastCheckedAt": "2025-12-22T22:34:14.696Z"
+    },
+    {
+      "channelId": "UCql_fqTxryFKW7jukEvNoCQ",
+      "channelUrl": "https://youtube.com/channel/UCql_fqTxryFKW7jukEvNoCQ",
+      "title": "GameSource",
+      "subscriberCount": 116000,
+      "emails": [],
+      "last6Views": [
+        2616,
+        10266,
+        4514,
+        10061,
+        8842,
+        8071
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5",
+        "grand theft auto"
+      ],
+      "qualityScore": 87,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 12,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.0718",
+        "longVideosCount": 10,
+        "avgViews": 8330
+      },
+      "lastCheckedAt": "2025-12-22T22:34:16.126Z"
+    },
+    {
+      "channelId": "UCEheMe0tCBmGLPkw1qRbuqA",
+      "channelUrl": "https://youtube.com/channel/UCEheMe0tCBmGLPkw1qRbuqA",
+      "title": "Frenchie",
+      "subscriberCount": 72300,
+      "emails": [],
+      "last6Views": [
+        3586,
+        59770,
+        45179,
+        77110,
+        25261,
+        44268
+      ],
+      "detectedGames": [
+        "cod",
+        "gta",
+        "gta5",
+        "minecraft"
+      ],
+      "qualityScore": 90,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.7823",
+        "longVideosCount": 10,
+        "avgViews": 56559
+      },
+      "lastCheckedAt": "2025-12-22T22:34:16.516Z"
+    },
+    {
+      "channelId": "UC8LtzLAQx6Z0aGXa3cIbTDw",
+      "channelUrl": "https://youtube.com/channel/UC8LtzLAQx6Z0aGXa3cIbTDw",
+      "title": "Pooborama",
+      "subscriberCount": 82100,
+      "emails": [],
+      "last6Views": [
+        16616,
+        18388,
+        7504,
+        19309,
+        8226,
+        27846
+      ],
+      "detectedGames": [
+        "gta"
+      ],
+      "qualityScore": 76,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 18,
+        "activity": 20,
+        "gamingFit": 8
+      },
+      "metrics": {
+        "viewRatio": "0.1970",
+        "longVideosCount": 10,
+        "avgViews": 16171
+      },
+      "lastCheckedAt": "2025-12-22T22:34:20.009Z"
+    },
+    {
+      "channelId": "UC_9W6Z5Y3lDpLk47Y_y5ITQ",
+      "channelUrl": "https://youtube.com/channel/UC_9W6Z5Y3lDpLk47Y_y5ITQ",
+      "title": "Daily Valorant",
+      "subscriberCount": 205000,
+      "emails": [
+        "ytdailyvalorant@gmail.com"
+      ],
+      "last6Views": [
+        50510,
+        29266,
+        57922,
+        23467,
+        49191,
+        26185
+      ],
+      "detectedGames": [
+        "valorant"
+      ],
+      "qualityScore": 86,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 18,
+        "activity": 20,
+        "gamingFit": 18
+      },
+      "metrics": {
+        "viewRatio": "0.1716",
+        "longVideosCount": 10,
+        "avgViews": 35182
+      },
+      "lastCheckedAt": "2025-12-22T22:34:28.587Z"
+    },
+    {
+      "channelId": "UChjyrzsPDaE3eAsdYzCixdQ",
+      "channelUrl": "https://youtube.com/channel/UChjyrzsPDaE3eAsdYzCixdQ",
+      "title": "VALORANT Esports Indonesia",
+      "subscriberCount": 277000,
+      "emails": [],
+      "last6Views": [
+        43875,
+        45827,
+        360,
+        27043,
+        20873,
+        249
+      ],
+      "detectedGames": [
+        "valorant"
+      ],
+      "qualityScore": 70,
+      "scoreBreakdown": {
+        "viewReliability": 20,
+        "avgViewPower": 12,
+        "activity": 20,
+        "gamingFit": 18
+      },
+      "metrics": {
+        "viewRatio": "0.0805",
+        "longVideosCount": 10,
+        "avgViews": 22295
+      },
+      "lastCheckedAt": "2025-12-22T22:34:29.741Z"
     }
   ]
 }

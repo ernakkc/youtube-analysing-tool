@@ -13,7 +13,7 @@ const {
 const { applyHardFilters } = require('../src/filters/channelFilters');
 const { analyzeGamingContent } = require('../src/analyzers/gameDetector');
 const { calculateQualityScore } = require('../src/scoring/qualityScore');
-const { saveChannel, getAllChannels } = require('../src/services/dbService');
+const { saveChannel, getAllChannels, clearAllChannels } = require('../src/services/dbService');
 const { getApiKeyManager } = require('../src/services/apiKeyManager');
 
 let mainWindow;
@@ -192,6 +192,11 @@ ipcMain.handle('start-analysis', async (event, queries) => {
     const channelIds = new Set();
     
     for (const query of queries) {
+      if (shouldStopAnalysis) {
+        sendLog('warning', '⚠️  Analiz durduruldu (keşif aşaması)');
+        break;
+      }
+      
       sendLog('info', `   Aranan: "${query}"`);
       
       // Doğrudan kanal arama
@@ -203,6 +208,11 @@ ipcMain.handle('start-analysis', async (event, queries) => {
       videoChannels.forEach(chId => channelIds.add(chId));
     }
     
+    if (shouldStopAnalysis) {
+      analysisInProgress = false;
+      return { success: false, stopped: true, message: 'Analiz durduruldu' };
+    }
+    
     sendLog('success', `✅ ${channelIds.size} benzersiz kanal bulundu`);
     
     // Her kanalı işle
@@ -210,6 +220,11 @@ ipcMain.handle('start-analysis', async (event, queries) => {
     let passedCount = 0;
     
     for (const channelId of channelIds) {
+      if (shouldStopAnalysis) {
+        sendLog('warning', `⚠️  Analiz durduruldu (${processedCount}/${channelIds.size} kanal işlendi)`);
+        break;
+      }
+      
       const result = await processChannel(channelId);
       processedCount++;
       
@@ -377,10 +392,17 @@ ipcMain.handle('stop-analysis', async () => {
  */
 ipcMain.handle('clear-all-channels', async () => {
   try {
+    console.log('Clearing all channels...');
     await clearAllChannels();
+    console.log('Channels cleared successfully');
     sendLog('success', '🗑️  Tüm sonuçlar silindi');
+    
+    // Sonuçları da gönder (boş array)
+    mainWindow.webContents.send('channels-cleared');
+    
     return { success: true };
   } catch (error) {
+    console.error('Error clearing channels:', error);
     sendLog('error', `❌ Sonuçlar silinirken hata: ${error.message}`);
     return { success: false, error: error.message };
   }
