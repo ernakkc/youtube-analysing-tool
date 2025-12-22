@@ -30,7 +30,10 @@ module.exports = {
   // Gaming keywords
   GAMING_KEYWORDS: [
     'gameplay', 'let\'s play', 'walkthrough', 'playthrough',
-    'oynuyorum', 'oynanış', 'türkçe oyun'
+    'oynuyorum', 'oynanış', 'türkçe oyun', 'tam oyun',
+    'gaming', 'gamer', 'video game', 'live gaming',
+    'esports', 'e-spor', 'turnuva', 'rekabetçi oyun',
+    'speedrun', 'hızlı oyun', 'challenge', 'meydan okuma'
   ],
   
   // Popular games
@@ -41,7 +44,13 @@ module.exports = {
     'league of legends', 'lol', 'pubg',
     'call of duty', 'cod', 'warzone',
     'fifa', 'fc 24', 'pes', 'efootball',
-    'roblox', 'among us', 'fall guys'
+    'roblox', 'among us', 'fall guys',
+    'dota 2', 'overwatch', 'rocket league',
+    'the sims', 'assassin\'s creed', 'cyberpunk 2077',
+    'witcher 3', 'red dead redemption', 'rdr2',
+    'halo', 'destiny 2', 'battlefield', 'battlefield 2042',
+    'forza horizon', 'need for speed', 'the last of us',
+    'ghost of tsushima', 'dark souls', 'elden ring'
   ],
   
   // Game aliases
@@ -49,7 +58,15 @@ module.exports = {
     'csgo': 'cs2',
     'cs:go': 'cs2',
     'gta v': 'gta5',
-    'gta 5': 'gta5'
+    'gta 5': 'gta5',
+    'fifa 23': 'fifa',
+    'fifa 24': 'fifa',
+    'efootball 2024': 'fifa',
+    'apex': 'apex legends',
+    'rdr': 'red dead redemption',
+    'rdr 2': 'red dead redemption',
+    'cod warzone': 'call of duty',
+    'valorant mobile': 'valorant'
   },
   
   // Scoring weights
