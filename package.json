@@ -2,9 +2,15 @@
   "name": "youtube-analysing-tool",
   "version": "1.0.0",
   "description": "Bu proje, belirlenen kriterlere göre YouTube üzerindeki oyun kanallarını otomatik olarak keşfeden, performanslarını analiz eden, kalite skorları hesaplayan ve sonuçları kaydeden bir yazılım sistemidir. Sistem; kanal aktifliği, izlenme performansı, içerik uygunluğu ve oyun odaklılık gibi metrikleri değerlendirerek kanalları tespit etmeyi amaçlar.",
-  "main": "src/index.js",
+  "main": "electron/main.js",
   "scripts": {
     "start": "node src/index.js",
+    "electron": "electron .",
+    "electron:dev": "NODE_ENV=development electron .",
+    "electron:build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,5 +30,52 @@
     "dotenv": "^17.2.3",
     "googleapis": "^169.0.0",
     "lowdb": "^7.0.1"
+  },
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.youtube.analyzer",
+    "productName": "YouTube Gaming Analyzer",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "src/**/*",
+      "data/",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "electron/assets/icon.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "icon": "electron/assets/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "icon": "electron/assets/icon.png",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }

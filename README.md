@@ -108,7 +108,7 @@ Skorlama öncesi direkt eleme kriterleri:
 | Shorts oranı | <%60 (son 10 videoda) |
 javascript
 ratio = avg_views_last6 / subscriberCount
-```
+
 
 **Örnek Hesaplama:**
 - 50.000 abone
@@ -120,7 +120,7 @@ ratio = avg_views_last6 / subscriberCount
 Ağırlıklı ve şeffaf skorlama sistemi:
 
 **İzlenme/Abone Oranı:**
-```⭐ Kalite Skorlama Sistemi (0-100)
+⭐ Kalite Skorlama Sistemi (0-100)
 
 Ağırlıklı ve şeffaf skorlama sistemi:
 
@@ -186,10 +186,10 @@ Son video zamanı
 ### 4. Gaming Uygunluğu (25 Puan)
 Rule-based 
 ### 🎯 Final Skor Hesaplama
-```0-59: Orta
+- 0-59: Orta
 - 0-39: Zayıf
 
-## javascript
+```javascript
 quality_score = 
   view_reliability (max 30) + 
   avg_view_power (max 25) + 

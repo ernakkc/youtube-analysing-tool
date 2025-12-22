@@ -128,7 +128,7 @@ youtube-analysing-tool/
 
 ## 📝 Lisans
 
-ISC
+MIT Lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız.
 
 ## 🤝 Katkıda Bulunma
 

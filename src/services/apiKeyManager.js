@@ -1,0 +1,118 @@
+const { YOUTUBE_API_KEYS } = require('../config/constants');
+
+/**
+ * API Anahtar Yöneticisi - Çoklu API anahtarlarının rotasyonunu yönetir
+ */
+class ApiKeyManager {
+  constructor() {
+    this.keys = YOUTUBE_API_KEYS || [];
+    this.currentIndex = 0;
+    this.failedKeys = new Set();
+    
+    if (this.keys.length === 0) {
+      throw new Error('.env dosyasında YouTube API anahtarı bulunamadı. Lütfen YOUTUBE_API_KEY veya YOUTUBE_API_KEY_1, YOUTUBE_API_KEY_2 vb. ayarlayın');
+    }
+    
+    console.log(`📌 API Anahtar Yöneticisi ${this.keys.length} anahtar ile başlatıldı`);
+  }
+  
+  /**
+   * Aktif API anahtarını getir
+   * @returns {string} - Mevcut API anahtarı
+   */
+  getCurrentKey() {
+    // Tüm anahtarlar başarısız olduysa, sıfırla ve tekrar dene
+    if (this.failedKeys.size === this.keys.length) {
+      console.log('⚠️  Tüm API anahtarları tükendi. Sıfırlanıyor...');
+      this.failedKeys.clear();
+    }
+    
+    // Sonraki kullanılabilir anahtarı bul
+    let attempts = 0;
+    while (attempts < this.keys.length) {
+      const key = this.keys[this.currentIndex];
+      
+      if (!this.failedKeys.has(this.currentIndex)) {
+        return key;
+      }
+      
+      this.currentIndex = (this.currentIndex + 1) % this.keys.length;
+      attempts++;
+    }
+    
+    // Buraya geldiysek, tüm anahtarlar başarısız
+    throw new Error('Tüm API anahtarları tüketildi');
+  }
+  
+  /**
+   * Mevcut anahtarı başarısız olarak işaretle ve sonrakine geç
+   * @param {Error} error - Hataya neden olan hata nesnesi
+   */
+  rotateKey(error) {
+    const errorMessage = error.message || '';
+    
+    // Hatanın quota ile ilgili olup olmadığını kontrol et
+    const isQuotaError = 
+      errorMessage.includes('quotaExceeded') ||
+      errorMessage.includes('quota') ||
+      error.code === 403;
+    
+    if (isQuotaError) {
+      console.log(`❌ API Anahtarı ${this.currentIndex + 1} kotası aşıldı. Değiştiriliyor...`);
+      this.failedKeys.add(this.currentIndex);
+      this.currentIndex = (this.currentIndex + 1) % this.keys.length;
+      
+      const remainingKeys = this.keys.length - this.failedKeys.size;
+      console.log(`🔄 API Anahtarı ${this.currentIndex + 1}'e geçildi. Kalan anahtar: ${remainingKeys}`);
+      
+      return true; // Rotasyon başarılı
+    }
+    
+    return false; // Quota hatası değil, değiştirme
+  }
+  
+  /**
+   * Anahtar kullanım istatistiklerini getir
+   * @returns {Object} - Kullanım istatistikleri
+   */
+  getStats() {
+    return {
+      totalKeys: this.keys.length,
+      currentKeyIndex: this.currentIndex + 1,
+      failedKeys: this.failedKeys.size,
+      remainingKeys: this.keys.length - this.failedKeys.size
+    };
+  }
+  
+  /**
+   * Tüm başarısız anahtarları sıfırla (günlük sıfırlama için kullanışlı)
+   */
+  reset() {
+    this.failedKeys.clear();
+    this.currentIndex = 0;
+    console.log('🔄 API Anahtar Yöneticisi sıfırlandı. Tüm anahtarlar tekrar kullanılabilir.');
+  }
+}
+
+// Singleton instance
+let instance = null;
+
+module.exports = {
+  /**
+   * ApiKeyManager örneğini getir (singleton)
+   * @returns {ApiKeyManager}
+   */
+  getApiKeyManager: () => {
+    if (!instance) {
+      instance = new ApiKeyManager();
+    }
+    return instance;
+  },
+  
+  /**
+   * Singleton örneğini sıfırla (test için kullanışlı)
+   */
+  resetApiKeyManager: () => {
+    instance = null;
+  }
+};

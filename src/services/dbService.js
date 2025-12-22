@@ -100,11 +100,22 @@ async function getTopChannels(limit = 10) {
     .slice(0, limit);
 }
 
+/**
+ * Clear all channels from database
+ * @returns {Promise<void>}
+ */
+async function clearAllChannels() {
+  await initDB();
+  db.data.channels = [];
+  await db.write();
+}
+
 module.exports = {
   initDB,
   saveChannel,
   getAllChannels,
   getChannelById,
   deleteChannel,
-  getTopChannels
+  getTopChannels,
+  clearAllChannels
 };

@@ -9,7 +9,8 @@ const { applyHardFilters } = require('./filters/channelFilters');
 const { analyzeGamingContent } = require('./analyzers/gameDetector');
 const { calculateQualityScore } = require('./scoring/qualityScore');
 const { saveChannel } = require('./services/dbService');
-const { GAMES, GAMING_KEYWORDS } = require('./config/constants');
+const { GAMES, GAMING_KEYWORDS, DELAYS } = require('./config/constants');
+const { getApiKeyManager } = require('./services/apiKeyManager');
 
 /**
  * Process a single channel through the entire pipeline
@@ -70,6 +71,7 @@ async function processChannel(channelId) {
       channelUrl: `https://youtube.com/channel/${channelDetails.channelId}`,
       title: channelDetails.title,
       subscriberCount: channelDetails.subscriberCount,
+      emails: channelDetails.emails || [],
       last6Views: recentVideos.slice(0, 6).map(v => v.viewCount),
       detectedGames: gamingAnalysis.detectedGames,
       qualityScore: scoreResult.total,
@@ -114,8 +116,8 @@ async function discoverChannels(queries) {
       videoChannelIds.forEach(id => channelIds.add(id));
       console.log(`   Found ${videoChannelIds.length} channels from videos`);
       
-      // Small delay to avoid rate limits
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      // Delay between queries to avoid rate limits
+      await new Promise(resolve => setTimeout(resolve, DELAYS.BETWEEN_QUERIES));
       
     } catch (error) {
       console.error(`   Error searching for "${query}":`, error.message);
@@ -133,11 +135,16 @@ async function runPipeline() {
   try {
     console.log('🚀 YouTube Gaming Channel Analyzer');
     console.log('==================================\n');
+    // Show API key stats
+    const apiKeyManager = getApiKeyManager();
+    const stats = apiKeyManager.getStats();
+    console.log(`🔑 Using ${stats.totalKeys} API key(s)\n`);
     
+    // 
     // Prepare search queries (combine games + keywords)
     const searchQueries = [
-      ...GAMES.slice(0, 1), 
-      ...GAMING_KEYWORDS.slice(0, 1)
+      ...GAMES, 
+      ...GAMING_KEYWORDS
     ];
     
     // 1. Discovery phase
@@ -153,9 +160,14 @@ async function runPipeline() {
         results.push(result);
       }
       
-      // Small delay between channels
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Delay between channels to avoid rate limits
+      await new Promise(resolve => setTimeout(resolve, DELAYS.BETWEEN_CHANNELS));
     }
+    
+    // Show final API key stats
+    const finalStats = apiKeyManager.getStats();
+    console.log(`🔑 API Keys used: ${finalStats.totalKeys - finalStats.remainingKeys}/${finalStats.totalKeys}`);
+    
     
     // 3. Summary
     console.log('\n' + '='.repeat(50));

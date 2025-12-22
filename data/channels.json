@@ -68,30 +68,33 @@
       "title": "Semih Biçer",
       "subscriberCount": 213000,
       "last6Views": [
-        25372,
-        46642,
-        29776,
-        38173,
-        25656,
+        25479,
+        46728,
+        29811,
+        38298,
+        25687,
         13117
       ],
       "detectedGames": [
         "gta",
         "gta5"
       ],
-      "qualityScore": 83,
+      "qualityScore": 93,
       "scoreBreakdown": {
         "viewReliability": 30,
         "avgViewPower": 18,
         "activity": 20,
-        "gamingFit": 15
+        "gamingFit": 25
       },
       "metrics": {
-        "viewRatio": "0.1697",
+        "viewRatio": "0.1700",
         "longVideosCount": 7,
-        "avgViews": 36146
+        "avgViews": 36208
       },
-      "lastCheckedAt": "2025-12-22T20:47:16.051Z"
+      "lastCheckedAt": "2025-12-22T22:10:18.615Z",
+      "emails": [
+        "semihbicer.yt@gmail.com"
+      ]
     },
     {
       "channelId": "UC1BZdzWiOPY6Mp9hGmj39uA",
@@ -137,6 +140,136 @@
         1329,
         1249
       ]
+    },
+    {
+      "channelId": "UCgkaQCepRkmCxRs-6SGvHCA",
+      "channelUrl": "https://youtube.com/channel/UCgkaQCepRkmCxRs-6SGvHCA",
+      "title": "Ceyto",
+      "subscriberCount": 152000,
+      "last6Views": [
+        566,
+        10917,
+        13559,
+        11364,
+        10227,
+        14162
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 78,
+      "scoreBreakdown": {
+        "viewReliability": 25,
+        "avgViewPower": 18,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.1548",
+        "longVideosCount": 8,
+        "avgViews": 23530
+      },
+      "lastCheckedAt": "2025-12-22T22:10:20.203Z",
+      "emails": []
+    },
+    {
+      "channelId": "UCCwQbbp4uX5o4ahnqMcmaJg",
+      "channelUrl": "https://youtube.com/channel/UCCwQbbp4uX5o4ahnqMcmaJg",
+      "title": "Kenan Karanfil",
+      "subscriberCount": 20400,
+      "last6Views": [
+        890,
+        2381,
+        3194,
+        1290,
+        3263,
+        1474
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 72,
+      "scoreBreakdown": {
+        "viewReliability": 25,
+        "avgViewPower": 12,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.0873",
+        "longVideosCount": 10,
+        "avgViews": 1781
+      },
+      "lastCheckedAt": "2025-12-22T22:10:24.201Z",
+      "emails": []
+    },
+    {
+      "channelId": "UCs5YrfOxcG3V0h8tfJBPTcw",
+      "channelUrl": "https://youtube.com/channel/UCs5YrfOxcG3V0h8tfJBPTcw",
+      "title": "Alejandro",
+      "subscriberCount": 108000,
+      "last6Views": [
+        2669,
+        528,
+        2660,
+        877,
+        3309,
+        6486
+      ],
+      "detectedGames": [
+        "gta",
+        "gta5"
+      ],
+      "qualityScore": 61,
+      "scoreBreakdown": {
+        "viewReliability": 20,
+        "avgViewPower": 6,
+        "activity": 20,
+        "gamingFit": 15
+      },
+      "metrics": {
+        "viewRatio": "0.0258",
+        "longVideosCount": 9,
+        "avgViews": 2792
+      },
+      "lastCheckedAt": "2025-12-22T22:10:23.390Z",
+      "emails": []
+    },
+    {
+      "channelId": "UCAuR-yXG5XLES86HA6XZR_A",
+      "channelUrl": "https://youtube.com/channel/UCAuR-yXG5XLES86HA6XZR_A",
+      "title": "Monchayi",
+      "subscriberCount": 151000,
+      "emails": [
+        "iletisimmonchayi@gmail.com"
+      ],
+      "last6Views": [
+        14543,
+        47489,
+        37523,
+        54924,
+        62078,
+        192777
+      ],
+      "detectedGames": [
+        "valorant",
+        "gta"
+      ],
+      "qualityScore": 100,
+      "scoreBreakdown": {
+        "viewReliability": 30,
+        "avgViewPower": 25,
+        "activity": 20,
+        "gamingFit": 25
+      },
+      "metrics": {
+        "viewRatio": "0.6968",
+        "longVideosCount": 10,
+        "avgViews": 105215
+      },
+      "lastCheckedAt": "2025-12-22T22:10:31.516Z"
     }
   ]
 }

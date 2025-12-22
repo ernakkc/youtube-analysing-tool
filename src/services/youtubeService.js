@@ -1,10 +1,63 @@
 const { google } = require('googleapis');
-const { YOUTUBE_API_KEY, DISCOVERY } = require('../config/constants');
+const { DISCOVERY } = require('../config/constants');
+const { getApiKeyManager } = require('./apiKeyManager');
+const { extractEmails } = require('../utils/helpers');
 
-const youtube = google.youtube({
-  version: 'v3',
-  auth: YOUTUBE_API_KEY
-});
+let youtube = null;
+
+/**
+ * Get or create YouTube API client with current API key
+ * @returns {Object} - YouTube API client
+ */
+function getYouTubeClient() {
+  const apiKeyManager = getApiKeyManager();
+  const currentKey = apiKeyManager.getCurrentKey();
+  
+  // Create new client with current key
+  youtube = google.youtube({
+    version: 'v3',
+    auth: currentKey
+  });
+  
+  return youtube;
+}
+
+/**
+ * Execute YouTube API request with automatic key rotation
+ * @param {Function} apiCall - Function that makes the API call
+ * @param {string} operationName - Name of the operation (for logging)
+ * @returns {Promise} - API response
+ */
+async function executeWithRetry(apiCall, operationName = 'API call') {
+  const apiKeyManager = getApiKeyManager();
+  const maxRetries = apiKeyManager.getStats().totalKeys;
+  let lastError;
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const client = getYouTubeClient();
+      return await apiCall(client);
+    } catch (error) {
+      lastError = error;
+      const rotated = apiKeyManager.rotateKey(error);
+      
+      if (!rotated) {
+        // Not a quota error, throw immediately
+        throw error;
+      }
+      
+      // If this was the last key, throw error
+      if (apiKeyManager.getStats().remainingKeys === 0) {
+        throw new Error(`All API keys exhausted for ${operationName}: ${error.message}`);
+      }
+      
+      // Otherwise, retry with next key
+      console.log(`🔄 Retrying ${operationName} with new key...`);
+    }
+  }
+  
+  throw lastError;
+}
 
 /**
  * Search for channels by keywords
@@ -15,8 +68,8 @@ const youtube = google.youtube({
  * @returns {Promise<Array>} - Array of channel IDs
  */
 async function searchChannels(query, regionCode = DISCOVERY.DEFAULT_REGION_CODE, relevanceLanguage = DISCOVERY.DEFAULT_LANGUAGE, maxResults = DISCOVERY.MAX_RESULTS_PER_QUERY) {
-  try {
-    const response = await youtube.search.list({
+  return executeWithRetry(async (client) => {
+    const response = await client.search.list({
       part: 'snippet',
       type: 'channel',
       q: query,
@@ -30,10 +83,7 @@ async function searchChannels(query, regionCode = DISCOVERY.DEFAULT_REGION_CODE,
       title: item.snippet.title,
       description: item.snippet.description
     }));
-  } catch (error) {
-    console.error('Error searching channels:', error.message);
-    throw error;
-  }
+  }, `searchChannels("${query}")`);
 }
 
 /**
@@ -45,8 +95,8 @@ async function searchChannels(query, regionCode = DISCOVERY.DEFAULT_REGION_CODE,
  * @returns {Promise<Array>} - Array of unique channel IDs
  */
 async function searchVideosForChannels(query, regionCode = DISCOVERY.DEFAULT_REGION_CODE, relevanceLanguage = DISCOVERY.DEFAULT_LANGUAGE, maxResults = DISCOVERY.MAX_RESULTS_PER_QUERY) {
-  try {
-    const response = await youtube.search.list({
+  return executeWithRetry(async (client) => {
+    const response = await client.search.list({
       part: 'snippet',
       type: 'video',
       q: query,
@@ -62,10 +112,7 @@ async function searchVideosForChannels(query, regionCode = DISCOVERY.DEFAULT_REG
     });
 
     return Array.from(channelIds);
-  } catch (error) {
-    console.error('Error searching videos:', error.message);
-    throw error;
-  }
+  }, `searchVideosForChannels("${query}")`);
 }
 
 /**
@@ -74,8 +121,8 @@ async function searchVideosForChannels(query, regionCode = DISCOVERY.DEFAULT_REG
  * @returns {Promise<Object>} - Channel details
  */
 async function getChannelDetails(channelId) {
-  try {
-    const response = await youtube.channels.list({
+  return executeWithRetry(async (client) => {
+    const response = await client.channels.list({
       part: 'snippet,statistics,contentDetails',
       id: channelId
     });
@@ -85,10 +132,15 @@ async function getChannelDetails(channelId) {
     }
 
     const channel = response.data.items[0];
+    
+    // Extract emails from description
+    const emails = extractEmails(channel.snippet.description);
+    
     return {
       channelId: channel.id,
       title: channel.snippet.title,
       description: channel.snippet.description,
+      emails: emails,
       customUrl: channel.snippet.customUrl,
       publishedAt: channel.snippet.publishedAt,
       subscriberCount: parseInt(channel.statistics.subscriberCount) || 0,
@@ -96,10 +148,7 @@ async function getChannelDetails(channelId) {
       videoCount: parseInt(channel.statistics.videoCount) || 0,
       uploadsPlaylistId: channel.contentDetails.relatedPlaylists.uploads
     };
-  } catch (error) {
-    console.error(`Error getting channel details for ${channelId}:`, error.message);
-    throw error;
-  }
+  }, `getChannelDetails(${channelId})`);
 }
 
 /**
@@ -109,18 +158,15 @@ async function getChannelDetails(channelId) {
  * @returns {Promise<Array>} - Array of video IDs
  */
 async function getRecentVideos(uploadsPlaylistId, maxResults = 10) {
-  try {
-    const response = await youtube.playlistItems.list({
+  return executeWithRetry(async (client) => {
+    const response = await client.playlistItems.list({
       part: 'contentDetails',
       playlistId: uploadsPlaylistId,
       maxResults
     });
 
     return response.data.items.map(item => item.contentDetails.videoId);
-  } catch (error) {
-    console.error('Error getting recent videos:', error.message);
-    throw error;
-  }
+  }, `getRecentVideos(${uploadsPlaylistId})`);
 }
 
 /**
@@ -129,26 +175,29 @@ async function getRecentVideos(uploadsPlaylistId, maxResults = 10) {
  * @returns {Promise<Array>} - Array of video details
  */
 async function getVideoDetails(videoIds) {
-  try {
-    const response = await youtube.videos.list({
+  return executeWithRetry(async (client) => {
+    const response = await client.videos.list({
       part: 'snippet,statistics,contentDetails',
       id: videoIds.join(',')
     });
 
-    return response.data.items.map(video => ({
-      videoId: video.id,
-      title: video.snippet.title,
-      description: video.snippet.description,
-      publishedAt: video.snippet.publishedAt,
-      duration: video.contentDetails.duration,
-      viewCount: parseInt(video.statistics.viewCount) || 0,
-      likeCount: parseInt(video.statistics.likeCount) || 0,
-      commentCount: parseInt(video.statistics.commentCount) || 0
-    }));
-  } catch (error) {
-    console.error('Error getting video details:', error.message);
-    throw error;
-  }
+    return response.data.items.map(video => {
+      // Extract emails from video description
+      const emails = extractEmails(video.snippet.description);
+      
+      return {
+        videoId: video.id,
+        title: video.snippet.title,
+        description: video.snippet.description,
+        emails: emails,
+        publishedAt: video.snippet.publishedAt,
+        duration: video.contentDetails.duration,
+        viewCount: parseInt(video.statistics.viewCount) || 0,
+        likeCount: parseInt(video.statistics.likeCount) || 0,
+        commentCount: parseInt(video.statistics.commentCount) || 0
+      };
+    });
+  }, `getVideoDetails([${videoIds.length} videos])`);
 }
 
 module.exports = {

@@ -3,9 +3,9 @@ const duration = require('dayjs/plugin/duration');
 dayjs.extend(duration);
 
 /**
- * Parse ISO 8601 duration to seconds
- * @param {string} isoDuration - ISO 8601 duration string (e.g., PT15M33S)
- * @returns {number} - Duration in seconds
+ * ISO 8601 süresini saniyeye çevir
+ * @param {string} isoDuration - ISO 8601 süre stringi (örn: PT15M33S)
+ * @returns {number} - Saniye cinsinden süre
  */
 function parseDuration(isoDuration) {
   const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
@@ -19,18 +19,18 @@ function parseDuration(isoDuration) {
 }
 
 /**
- * Convert seconds to minutes
- * @param {number} seconds - Duration in seconds
- * @returns {number} - Duration in minutes
+ * Saniyeyi dakikaya çevir
+ * @param {number} seconds - Saniye cinsinden süre
+ * @returns {number} - Dakika cinsinden süre
  */
 function secondsToMinutes(seconds) {
   return Math.floor(seconds / 60);
 }
 
 /**
- * Calculate days since a given date
- * @param {string} dateString - Date string
- * @returns {number} - Days since the date
+ * Belirli bir tarihten bu yana geçen gün sayısını hesapla
+ * @param {string} dateString - Tarih stringi
+ * @returns {number} - Tarihten bu yana geçen gün sayısı
  */
 function daysSince(dateString) {
   const date = dayjs(dateString);
@@ -39,18 +39,18 @@ function daysSince(dateString) {
 }
 
 /**
- * Check if a video is a short based on duration
- * @param {number} durationInSeconds - Video duration in seconds
- * @returns {boolean} - True if it's a short
+ * Videonun süresine göre shorts olup olmadığını kontrol et
+ * @param {number} durationInSeconds - Saniye cinsinden video süresi
+ * @returns {boolean} - Shorts ise true
  */
 function isShort(durationInSeconds) {
   return durationInSeconds < 60;
 }
 
 /**
- * Calculate average of an array of numbers
- * @param {Array<number>} numbers - Array of numbers
- * @returns {number} - Average
+ * Sayı dizisinin ortalamasını hesapla
+ * @param {Array<number>} numbers - Sayı dizisi
+ * @returns {number} - Ortalama
  */
 function calculateAverage(numbers) {
   if (!numbers || numbers.length === 0) return 0;
@@ -59,12 +59,37 @@ function calculateAverage(numbers) {
 }
 
 /**
- * Format number with thousands separator
- * @param {number} num - Number to format
- * @returns {string} - Formatted number
+ * Sayıyı binlik ayırıcı ile formatla
+ * @param {number} num - Formatlanacak sayı
+ * @returns {string} - Formatlanmış sayı
  */
 function formatNumber(num) {
   return new Intl.NumberFormat('tr-TR').format(num);
+}
+
+/**
+ * Metinden email adreslerini çıkar
+ * @param {string} text - Aranacak metin (kanal açıklaması vb.)
+ * @returns {Array<string>} - Bulunan email adresleri
+ */
+function extractEmails(text) {
+  if (!text) return [];
+  
+  // Email regex pattern
+  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  const matches = text.match(emailRegex);
+  
+  if (!matches) return [];
+  
+  // Deduplicate and filter out common false positives
+  const uniqueEmails = [...new Set(matches)];
+  const filtered = uniqueEmails.filter(email => {
+    // Exclude common image/video file extensions
+    const invalidExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.mp4', '.avi'];
+    return !invalidExtensions.some(ext => email.toLowerCase().endsWith(ext));
+  });
+  
+  return filtered;
 }
 
 module.exports = {
@@ -73,5 +98,6 @@ module.exports = {
   daysSince,
   isShort,
   calculateAverage,
-  formatNumber
+  formatNumber,
+  extractEmails
 };

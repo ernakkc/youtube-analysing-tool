@@ -1,13 +1,33 @@
 require('dotenv').config();
 
-module.exports = {
-  // YouTube API
-  YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
+// Çoklu API anahtarlarını environment'tan ayrıştır
+function parseApiKeys() {
+  const keys = [];
   
-  // Database
+  // Tek anahtar desteği (geriye dönük uyumluluk)
+  if (process.env.YOUTUBE_API_KEY) {
+    keys.push(process.env.YOUTUBE_API_KEY);
+  }
+  
+  // Çoklu anahtar desteği (YOUTUBE_API_KEY_1, YOUTUBE_API_KEY_2, vb.)
+  let i = 1;
+  while (process.env[`YOUTUBE_API_KEY_${i}`]) {
+    keys.push(process.env[`YOUTUBE_API_KEY_${i}`]);
+    i++;
+  }
+  
+  return keys.length > 0 ? keys : null;
+}
+
+module.exports = {
+  // YouTube API - Çoklu anahtar desteği
+  YOUTUBE_API_KEYS: parseApiKeys(),
+  YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY, // Geriye dönük uyumluluk
+  
+  // Veritabanı
   DB_PATH: process.env.DB_PATH || './data/channels.json',
   
-  // Filter thresholds
+  // Filtre eşikleri
   FILTERS: {
     MIN_SUBSCRIBERS: parseInt(process.env.MIN_SUBSCRIBERS) || 10000,
     MAX_SUBSCRIBERS: parseInt(process.env.MAX_SUBSCRIBERS) || 500000,
@@ -20,14 +40,21 @@ module.exports = {
     TOTAL_VIDEOS_TO_CHECK: 6
   },
   
-  // Discovery
+  // Keşif ayarları
   DISCOVERY: {
     DEFAULT_REGION_CODE: process.env.DEFAULT_REGION_CODE || 'TR',
     DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE || 'tr',
     MAX_RESULTS_PER_QUERY: parseInt(process.env.MAX_RESULTS_PER_QUERY) || 50
   },
   
-  // Gaming keywords
+  // Bekleme süreleri (milisaniye)
+  DELAYS: {
+    BETWEEN_QUERIES: parseInt(process.env.DELAY_BETWEEN_QUERIES) || 5000,     // Sorgular arası (varsayılan: 5 saniye)
+    BETWEEN_CHANNELS: parseInt(process.env.DELAY_BETWEEN_CHANNELS) || 1000,   // Kanallar arası (varsayılan: 1 saniye)
+    AFTER_API_ERROR: parseInt(process.env.DELAY_AFTER_API_ERROR) || 3000      // API hatası sonrası (varsayılan: 3 saniye)
+  },
+  
+  // Oyun anahtar kelimeleri
   GAMING_KEYWORDS: [
     'gameplay', 'let\'s play', 'walkthrough', 'playthrough',
     'oynuyorum', 'oynanış', 'türkçe oyun', 'tam oyun',
@@ -36,7 +63,7 @@ module.exports = {
     'speedrun', 'hızlı oyun', 'challenge', 'meydan okuma'
   ],
   
-  // Popular games
+  // Oyun isimleri
   GAMES: [
     'gta', 'gta5', 'gta 5', 'grand theft auto',
     'valorant', 'cs2', 'cs:2', 'counter strike',
@@ -53,7 +80,7 @@ module.exports = {
     'ghost of tsushima', 'dark souls', 'elden ring'
   ],
   
-  // Game aliases
+  // Oyun takma adları
   GAME_ALIASES: {
     'csgo': 'cs2',
     'cs:go': 'cs2',
@@ -69,11 +96,11 @@ module.exports = {
     'valorant mobile': 'valorant'
   },
   
-  // Scoring weights
+  // Puanlama ağırlıkları
   SCORING: {
-    VIEW_RELIABILITY: 30,
-    AVG_VIEW_POWER: 25,
-    CHANNEL_ACTIVITY: 20,
-    GAMING_FIT: 25
+    VIEW_RELIABILITY: 30, // görüntüleme güvenilirliği
+    AVG_VIEW_POWER: 25, // ortalama izlenme gücü
+    CHANNEL_ACTIVITY: 20, // kanal etkinliği
+    GAMING_FIT: 25 // oyun uyumu
   }
 };
