@@ -27,7 +27,37 @@ YOUTUBE_API_KEY=your_actual_api_key_here
 
 ## 📦 Kullanım
 
-Projeyi çalıştırmak için:
+### 🖥️ Desktop Uygulaması (Önerilen)
+
+Electron GUI ile modern masaüstü deneyimi:
+
+```bash
+# Geliştirme modunda çalıştırma
+npm run electron:dev
+
+# Normal mod
+npm run electron
+
+# Build (derlenmiş exe/app oluşturma)
+npm run build:mac    # macOS için .app ve .dmg
+npm run build:win    # Windows için .exe
+npm run build:linux  # Linux için AppImage ve .deb
+```
+
+**Özellikler:**
+- 🎨 Modern 3-tab arayüz
+- 🔑 Multi API key yönetimi
+- 📊 Real-time log ve progress bar
+- ⏯️ Start/Stop kontrolleri
+- 📧 Email toplama (kanal + video açıklamaları)
+- 📥 CSV/JSON export
+- 💾 Otomatik ayar kaydetme
+- ⏱️ Özelleştirilebilir delay ayarları
+
+### 💻 CLI Modu
+
+Terminal üzerinden klasik kullanım:
+
 ```bash
 npm start
 ```
@@ -43,12 +73,24 @@ Bu komut, tüm pipeline'ı çalıştırır:
 
 ```
 youtube-analysing-tool/
+├── electron/                     # Desktop uygulama
+│   ├── main.js                   # Electron ana process
+│   ├── preload.js                # IPC güvenlik köprüsü
+│   ├── renderer/                 # GUI
+│   │   ├── index.html            # 3-tab arayüz
+│   │   ├── styles.css            # Modern CSS
+│   │   └── app.js                # Frontend logic
+│   └── assets/                   # İkonlar
+│       ├── icon.png              # Linux
+│       ├── icon.icns             # macOS
+│       └── icon.ico              # Windows
 ├── src/
 │   ├── config/
 │   │   └── constants.js          # Konfigürasyon ve sabitler
 │   ├── services/
 │   │   ├── youtubeService.js     # YouTube API entegrasyonu
-│   │   └── dbService.js          # Veritabanı işlemleri
+│   │   ├── apiKeyManager.js      # Multi API key yönetimi
+│   │   └── dbService.js          # Veritabanı işlemleri (LowDB)
 │   ├── filters/
 │   │   └── channelFilters.js     # Hard filtreler
 │   ├── analyzers/
@@ -56,34 +98,49 @@ youtube-analysing-tool/
 │   ├── scoring/
 │   │   └── qualityScore.js       # Kalite skoru hesaplama
 │   ├── utils/
-│   │   └── helpers.js            # Yardımcı fonksiyonlar
-│   └── index.js                  # Ana pipeline
+│   │   └── helpers.js            # Yardımcı fonksiyonlar (extractEmails dahil)
+│   └── index.js                  # Ana pipeline (CLI modu)
 ├── data/
 │   └── channels.json             # Veritabanı (otomatik oluşur)
+├── dist/                         # Build çıktıları (npm run build sonrası)
 ├── .env                          # Environment değişkenleri
 ├── .env.example                  # Örnek env dosyası
-└── package.json
+├── package.json
+├── README.md                     # Detaylı dokümantasyon
+├── SETUP.md                      # Bu dosya
+└── ELECTRON_GUIDE.md             # Müşteri kullanım kılavuzu
 ```
 
 ## 🎯 Özellikler
 
-### Kanal Keşfi (Discovery)
+### 🖥️ Desktop GUI
+- **Modern Arayüz**: 3 sekmeli Electron uygulaması
+- **Multi API Key**: Otomatik key rotation
+- **Real-time Feedback**: Canlı log ve progress bar
+- **Toast Notifications**: Şık bildirimler
+- **Email Extraction**: Kanal ve video açıklamalarından otomatik email toplama
+- **Export Options**: CSV/JSON native save dialogs
+- **Delay Settings**: API rate limit için özelleştirilebilir bekleme süreleri
+- **Auto-save**: Ayarlar otomatik kaydedilir
+
+### 🔍 Kanal Keşfi (Discovery)
 - YouTube Data API v3 ile kanal arama
 - Video bazlı reverse keşif
 - TR/Global bölge desteği
 
-### Hard Filtreler
+### 🚫 Hard Filtreler
 - Abone sayısı: 10.000 - 500.000
 - Son yükleme: ≤30 gün
 - Uzun video kontrolü (≥3 dk)
 - Shorts oranı kontrolü
 
-### Analiz Katmanı
-- Otomatik oyun tespiti
+### 📊 Analiz Katmanı
+- Otomatik oyun tespiti (20+ oyun)
 - Gaming keyword analizi
 - İzlenme/abone oranı hesaplama
+- Email extraction (regex pattern matching)
 
-### Kalite Skorlama (0-100)
+### ⭐ Kalite Skorlama (0-100)
 - View Sağlamlığı: 30 puan
 - Ortalama İzlenme Gücü: 25 puan
 - Kanal Aktifliği: 20 puan

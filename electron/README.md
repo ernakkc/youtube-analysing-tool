@@ -45,9 +45,57 @@ electron/
 ## 🔧 Ayarlar
 
 Uygulama ayarları aşağıdaki konumda saklanır:
-- **macOS**: `~/Library/Application Support/YouTube Gaming Analyzer/config.json`
-- **Windows**: `%APPDATA%/YouTube Gaming Analyzer/config.json`
-- **Linux**: `~/.config/YouTube Gaming Analyzer/config.json`
+- **macOS**: `~/Library/Application Support/Electron/config.json` (dev) veya `~/Library/Application Support/YouTube Gaming Analyzer/config.json` (production)
+- **Windows**: `%APPDATA%/Electron/config.json` (dev) veya `%APPDATA%/YouTube Gaming Analyzer/config.json` (production)
+- **Linux**: `~/.config/Electron/config.json` (dev) veya `~/.config/YouTube Gaming Analyzer/config.json` (production)
+
+## 💾 Sonuç Veritabanı
+
+Analiz sonuçları şurada saklanır:
+- **Geliştirme**: `[proje_klasörü]/data/channels.json`
+- **Production**: Uygulama ile birlikte paketlenir ve kullanıcı verisi olarak yönetilir
+
+## ✨ Özellikler
+
+### 🎛️ Settings Sekmesi
+- **Multi API Key**: Birden fazla YouTube API anahtarı ekleyebilir ve yönetebilirsiniz
+- **Filtreler**: Abone, son yükleme, Shorts oranı gibi filtreleri özelleştirin
+- **Keşif**: Bölge kodu, dil, sonuç limiti ayarları
+- **Delay Ayarları**: API rate limit için özelleştirilebilir bekleme süreleri
+  - Sorgular arası (varsayılan: 5 saniye)
+  - Kanallar arası (varsayılan: 1 saniye)
+  - API hata sonrası (varsayılan: 3 saniye)
+- **Otomatik Kayıt**: Tüm ayarlar otomatik olarak kaydedilir
+
+### 📊 Analysis Sekmesi
+- **Sorgu Girişi**: Oyun isimleri ve keyword'ler (her satıra bir sorgu)
+- **Real-time Log**: Tüm işlemlerin canlı takibi (renkli log mesajları)
+- **Progress Bar**: İşlem durumunu yüzdelik olarak gösterir
+- **Start/Stop Butonları**: Analizi başlatın veya durdurun (mevcut işlem tamamlanır)
+
+### 📈 Results Sekmesi
+- **Kanal Kartları**: Her kanal için detaylı bilgi kartı
+  - Kanal adı, abone sayısı, kalite skoru
+  - Tespit edilen oyunlar
+  - Email adresleri (varsa, mailto: link ile)
+  - Skor detayları (View Reliability, Avg View Power, Activity, Gaming Fit)
+- **Export Seçenekleri**:
+  - CSV İndir (native save dialog)
+  - JSON İndir (native save dialog)
+- **Sıralama**: Skora göre sıralama
+- **Yenileme**: Sonuçları yeniden yükle
+- **Tümünü Sil**: Tüm sonuçları sil (onay gerektirir)
+
+### 🔔 Toast Notifications
+- Başarı, hata, uyarı mesajları için şık bildirimler
+- `alert()` yerine modern toast sistemi
+- Otomatik kaybolma (3 saniye)
+
+### 📧 Email Extraction
+- **Kanal açıklamalarından** email toplama
+- **Son 10 video açıklamalarından** email toplama
+- Otomatik tekrar temizleme (Set kullanımı)
+- False-positive filtreleme (.png, .jpg dosya uzantıları hariç)
 
 ## 📝 Notlar
 

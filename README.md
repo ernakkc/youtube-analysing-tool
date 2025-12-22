@@ -4,6 +4,8 @@ YouTube üzerindeki oyun kanallarını otomatik olarak keşfeden, performanslar�
 
 ## 🚀 Hızlı Başlangıç
 
+### 🖥️ Desktop Uygulaması (Electron - Önerilen)
+
 ```bash
 # Projeyi klonlayın
 git clone https://github.com/ernakkc/youtube-analysing-tool.git
@@ -16,7 +18,22 @@ npm install
 cp .env.example .env
 # .env dosyasına YouTube API key'inizi ekleyin
 
-# Uygulamayı çalıştırın
+# Desktop uygulamasını çalıştırın
+npm run electron
+
+# Geliştirme modunda (DevTools ile)
+npm run electron:dev
+
+# Build (exe/app oluşturma)
+npm run build:mac    # macOS için .app ve .dmg
+npm run build:win    # Windows için .exe
+npm run build:linux  # Linux için AppImage ve .deb
+```
+
+### 💻 CLI Modu (Terminal)
+
+```bash
+# Klasik komut satırı kullanımı
 npm start
 ```
 
@@ -27,6 +44,19 @@ npm start
 
 ## 💡 Özellikler
 
+### 🖥️ Desktop Uygulaması
+✅ **Modern GUI** - 3 sekmeli arayüz (Ayarlar, Analiz, Sonuçlar)  
+✅ **Multi API Key** - Birden fazla API anahtarı yönetimi  
+✅ **Otomatik Kayıt** - Ayarlar otomatik kaydedilir  
+✅ **Real-time Log** - Canlı işlem takibi ve ilerleme çubuğu  
+✅ **Durdurma** - Analizi istediğiniz zaman durdurun  
+✅ **Toast Bildirimleri** - Şık ve modern bildirimler  
+✅ **CSV/JSON Export** - Native save dialog ile dışa aktarma  
+✅ **Email Toplama** - Kanal ve video açıklamalarından email çıkarma  
+✅ **Delay Ayarları** - API rate limit için özelleştirilebilir bekleme süreleri  
+✅ **Platform Icons** - macOS (.icns), Windows (.ico), Linux (.png)
+
+### 🔧 Analiz Özellikleri
 ✅ **Otomatik Kanal Keşfi** - İki farklı yöntemle kanal bulma  
 ✅ **Akıllı Filtreleme** - Shorts, abone sayısı, aktivite kontrolü  
 ✅ **Oyun Tespiti** - 20+ oyun otomatik tespit edilir  
@@ -384,6 +414,11 @@ SHORTS_THRESHOLD_PERCENTAGE=60
 DEFAULT_REGION_CODE=TR
 DEFAULT_LANGUAGE=tr
 MAX_RESULTS_PER_QUERY=50
+
+# Delays (Opsiyonel - Electron GUI'den de ayarlanabilir)
+DELAYS_BETWEEN_QUERIES=5000     # Sorgular arası ms (varsayılan 5 saniye)
+DELAYS_BETWEEN_CHANNELS=1000    # Kanallar arası ms (varsayılan 1 saniye)
+DELAYS_AFTER_API_ERROR=3000     # API hata sonrası ms (varsayılan 3 saniye)
 ```
 
 ## 🤝 Katkıda Bulunma
@@ -419,10 +454,18 @@ MIT Lisansı. Detaylar için `LICENSE` dosyasına bakın.
 {
   "channelId": "UCxxxx",
   "channelUrl": "https://youtube.com/channel/UCxxxx",
+  "title": "Örnek Gaming Kanalı",
   "subscriberCount": 84200,
-  "last6_views": [12000, 9000, 15000, 11000, 8000, 10000],
-  "detected_games": ["Valorant", "CS2"],
-  "quality_score": 82,
-  "last_checked_at": "2025-12-21T23:10:00Z"
+  "emails": ["contact@example.com", "business@gamingchannel.com"],
+  "last6Views": [12000, 9000, 15000, 11000, 8000, 10000],
+  "detectedGames": ["Valorant", "CS2"],
+  "qualityScore": 82,
+  "scoreBreakdown": {
+    "viewReliability": 25,
+    "avgViewPower": 18,
+    "activity": 15,
+    "gamingFit": 22
+  },
+  "lastCheckedAt": "2025-12-23T01:30:00Z"
 }
 ```

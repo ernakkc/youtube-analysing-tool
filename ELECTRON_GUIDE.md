@@ -44,11 +44,17 @@
    - Dil: tr (Türkçe)
    - Max Sonuç: 50
 
-4. **🎮 Oyun Listesi**
+4. **⏱️ Bekleme Süreleri** (API rate limit için)
+   - Sorgular Arası: 5 saniye (varsayılan)
+   - Kanallar Arası: 1 saniye (varsayılan)
+   - API Hata Sonrası: 3 saniye (varsayılan)
+   - İsteğe bağlı ayarlayabilirsiniz
+
+5. **🎮 Oyun Listesi**
    - Aramak istediğiniz oyunları virgülle ayırarak girin
    - Örnek: `gta, valorant, cs2, minecraft, fortnite`
 
-5. **💾 Kaydet** butonuna tıklayın
+6. **💾 Kaydet** butonuna tıklayın
 
 ### 4️⃣ Analiz Çalıştırma
 
@@ -78,14 +84,18 @@
 - **Kanal Kartları**: Her kanal için:
   - Kanal adı ve kalite skoru (0-100)
   - Abone sayısı ve ortalama izlenme
-  - Skorların detaylı dağılımı
+  - 📧 **Email adresleri** (kanal ve video açıklamalarından otomatik toplanan)
+    - Email'e tıklayarak varsayılan mail uygulaması ile mesaj gönderebilirsiniz
+  - Skorların detaylı dağılımı (View Reliability, Avg View Power, Activity, Gaming Fit)
   - Tespit edilen oyunlar (etiket olarak)
   - "Kanalı Aç →" linki ile YouTube'da görüntüleme
 
 - **Araç Çubuğu**:
   - 🔄 **Yenile**: Veritabanındaki tüm kanalları tekrar yükle
-  - 📥 **CSV İndir**: Sonuçları Excel'de açılabilir formatta indir
+  - 📥 **CSV İndir**: Sonuçları Excel'de açılabilir formatta indir (email sütunu dahil)
+  - 📥 **JSON İndir**: Ham veri formatında indir
   - ⬇️ **Skorla Sırala**: En yüksek skordan en düşüğe
+  - 🗑️ **Tümünü Sil**: Tüm sonuçları veritabanından sil (onay gerektirir)
 
 ## 🔧 Gelişmiş Özellikler
 
@@ -95,6 +105,16 @@ Uygulamaotomatik olarak key'leri rotate eder:
 - İlk key quota'sı tükenir → Otomatik 2. key'e geçer
 - Tüm key'ler tükenir → Sıfırlama mesajı gösterir
 - Her analizin sonunda API kullanım istatistikleri gösterilir
+
+### Email Toplama
+
+Sistem otomatik olarak email toplar:
+- **Kanal açıklamalarından** (About sekmesi)
+- **Son 10 video açıklamalarından**
+- Duplicate'ler otomatik temizlenir
+- False-positive filtreleme (`.png`, `.jpg` dosya uzantıları hariç tutulur)
+
+**Not:** YouTube API üzerinden sadece public description alanlarına erişilebilir. "View email address" butonu arkasındaki emailler API'de bulunmaz.
 
 ### Veri Saklama
 
