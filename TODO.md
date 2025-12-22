@@ -4,69 +4,67 @@ Bu dosya, YouTube analiz aracı projesinin geliştirme aşamalarını ve yapıla
 
 ## Genel Görevler
 
-- [ ] Proje yapısını kur (klasörler, temel dosyalar)
-- [ ] YouTube Data API v3 entegrasyonu
-- [ ] Veritabanı kurulumu (LowDB başlangıç, PostgreSQL geçiş)
-- [ ] Temel pipeline implementasyonu (Discovery → Filter → Analyze → Score → Save)
+- [x] Proje yapısını kur (klasörler, temel dosyalar)
+- [x] YouTube Data API v3 entegrasyonu
+- [x] Veritabanı kurulumu (LowDB başlangıç, PostgreSQL geçiş)
+- [x] Temel pipeline implementasyonu (Discovery → Filter → Analyze → Score → Save)
 
 ## Kanal Keşfi (Discovery)
 
-- [ ] Search API ile kanal bulma fonksiyonu
-  - [ ] Oyun isimleri ve keyword'ler ile arama
-  - [ ] TR modu desteği (regionCode=TR, relevanceLanguage=tr)
-- [ ] Video → Kanal reverse keşfi
-  - [ ] Oyun keyword'leriyle video arama
-  - [ ] Channel ID'leri toplama ve duplicate kontrolü
-- [ ] API rate limit yönetimi
+- [x] Search API ile kanal bulma fonksiyonu
+  - [x] Oyun isimleri ve keyword'ler ile arama
+  - [x] TR modu desteği (regionCode=TR, relevanceLanguage=tr)
+- [x] Video → Kanal reverse keşfi
+  - [x] Oyun keyword'leriyle video arama
+  - [x] Channel ID'leri toplama ve duplicate kontrolü
+- [x] API rate limit yönetimi (basit delay mekanizması)
 
 ## Hard Filtreler (Filter)
 
-- [ ] Kanal seviyesi filtreler
-  - [ ] Subscriber count kontrolü (10k-500k)
-  - [ ] Son yükleme tarihi kontrolü (≤30 gün)
-  - [ ] Dil/region uyumu kontrolü
-- [ ] Video seviyesi filtreler
-  - [ ] Uzun video tanımı (duration ≥3 dk)
-  - [ ] İzlenme sayısı kontrolü (son 6 videoda ≥1k)
-- [ ] Shorts filtreleme
-  - [ ] Shorts yok sayma (<60sn)
-  - [ ] Shorts oranı kontrolü (%60+ ise eleme)
+- [x] Kanal seviyesi filtreler
+  - [x] Subscriber count kontrolü (10k-500k)
+  - [x] Son yükleme tarihi kontrolü (≤30 gün)
+  - [x] Dil/region uyumu kontrolü
+- [x] Video seviyesi filtreler
+  - [x] Uzun video tanımı (duration ≥3 dk)
+  - [x] İzlenme sayısı kontrolü (son 6 videoda ≥1k)
+- [x] Shorts filtreleme
+  - [x] Shorts yok sayma (<60sn)
+  - [x] Shorts oranı kontrolü (%60+ ise eleme)
 
 ## Analiz Katmanı (Analyze)
 
-- [ ] Detected Games çıkarımı
-  - [ ] Video başlığı analizi
-  - [ ] Video açıklaması analizi
-  - [ ] Kanal açıklaması analizi
-  - [ ] Basit keyword listesi
-  - [ ] Regex ve fuzzy match implementasyonu
-  - [ ] Alias listesi (csgo→cs2, vb.)
-- [ ] Ortalama izlenme/abone oranı hesaplama
+- [x] Detected Games çıkarımı
+  - [x] Video başlığı analizi
+  - [x] Video açıklaması analizi
+  - [x] Kanal açıklaması analizi
+  - [x] Basit keyword listesi
+  - [ ] Regex ve fuzzy match implementasyonu (gelişmiş)
+  - [x] Alias listesi (csgo→cs2, vb.)
+- [x] Ortalama izlenme/abone oranı hesaplama
 
 ## Kalite Skoru (Score)
 
-- [ ] View sağlamlığı puanı (30 puan)
-- [ ] Ortalama izlenme gücü puanı (25 puan)
-- [ ] Kanal aktifliği puanı (20 puan)
-- [ ] Gaming uygunluğu puanı (25 puan)
-  - [ ] Rule-based başlangıç
+- [x] View sağlamlığı puanı (30 puan)
+- [x] Ortalama izlenme gücü puanı (25 puan)
+- [x] Kanal aktifliği puanı (20 puan)
+- [x] Gaming uygunluğu puanı (25 puan)
+  - [x] Rule-based başlangıç
   - [ ] ML entegrasyonu planı
-- [ ] Final skor hesaplama
+- [x] Final skor hesaplama
 
 ## Çıktı ve Saklama (Save)
 
-- [ ] JSON formatı tanımlama
-- [ ] LowDB ile yerel saklama
-- [ ] PostgreSQL geçişi
-- [ ] Güncelleme mekanizması
+- [x] JSON formatı tanımlama
+- [x] LowDB ile yerel saklama
+- [x] Güncelleme mekanizması
 
 ## Teknoloji ve Araçlar
 
-- [ ] Node.js projesi kurulumu
-- [ ] googleapis paketi entegrasyonu
-- [ ] dayjs tarih işlemleri
-- [ ] Test yazma
-- [ ] Hata yönetimi ve logging
+- [x] Node.js projesi kurulumu
+- [x] googleapis paketi entegrasyonu
+- [x] dayjs tarih işlemleri
+- [ ] Hata yönetimi ve logging (gelişmiş)
 
 ## Opsiyonel Özellikler
 

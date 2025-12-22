@@ -1,0 +1,28 @@
+{
+  "name": "youtube-analysing-tool",
+  "version": "1.0.0",
+  "description": "Bu proje, belirlenen kriterlere göre YouTube üzerindeki oyun kanallarını otomatik olarak keşfeden, performanslarını analiz eden, kalite skorları hesaplayan ve sonuçları kaydeden bir yazılım sistemidir. Sistem; kanal aktifliği, izlenme performansı, içerik uygunluğu ve oyun odaklılık gibi metrikleri değerlendirerek kanalları tespit etmeyi amaçlar.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ernakkc/youtube-analysing-tool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ernakkc/youtube-analysing-tool/issues"
+  },
+  "homepage": "https://github.com/ernakkc/youtube-analysing-tool#readme",
+  "dependencies": {
+    "dayjs": "^1.11.19",
+    "dotenv": "^17.2.3",
+    "googleapis": "^169.0.0",
+    "lowdb": "^7.0.1"
+  }
+}
