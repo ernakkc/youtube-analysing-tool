@@ -7,20 +7,26 @@ try {
 
 // Çoklu API anahtarlarını environment'tan ayrıştır
 function parseApiKeys() {
+  console.log('🔍 [constants.js] parseApiKeys() çağrıldı');
+  console.log('🔍 [constants.js] process.env.YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? `✅ MEVCUT (${process.env.YOUTUBE_API_KEY.length} karakter)` : '❌ YOK');
+  
   const keys = [];
   
   // Tek anahtar desteği (geriye dönük uyumluluk)
   if (process.env.YOUTUBE_API_KEY) {
     keys.push(process.env.YOUTUBE_API_KEY);
+    console.log('🔍 [constants.js] YOUTUBE_API_KEY eklendi:', process.env.YOUTUBE_API_KEY.substring(0, 10) + '...');
   }
   
   // Çoklu anahtar desteği (YOUTUBE_API_KEY_1, YOUTUBE_API_KEY_2, vb.)
   let i = 1;
   while (process.env[`YOUTUBE_API_KEY_${i}`]) {
     keys.push(process.env[`YOUTUBE_API_KEY_${i}`]);
+    console.log(`🔍 [constants.js] YOUTUBE_API_KEY_${i} eklendi:`, process.env[`YOUTUBE_API_KEY_${i}`].substring(0, 10) + '...');
     i++;
   }
   
+  console.log(`🔍 [constants.js] Toplam ${keys.length} anahtar bulundu`);
   return keys.length > 0 ? keys : null;
 }
 

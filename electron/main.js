@@ -14,32 +14,193 @@ const { applyHardFilters } = require('../src/filters/channelFilters');
 const { analyzeGamingContent } = require('../src/analyzers/gameDetector');
 const { calculateQualityScore } = require('../src/scoring/qualityScore');
 const { saveChannel, getAllChannels, clearAllChannels } = require('../src/services/dbService');
-const { getApiKeyManager } = require('../src/services/apiKeyManager');
+
+// ApiKeyManager'ı dinamik yüklemek için path
+const apiKeyManagerPath = path.resolve(__dirname, '../src/services/apiKeyManager.js');
+
+/**
+ * Fresh ApiKeyManager al - API key'leri direkt process.env'den geçerek
+ */
+function getFreshApiKeyManager() {
+  console.log('🔄 [getFreshApiKeyManager] Başlatıldı');
+  
+  // process.env'den API key'leri topla
+  const apiKeys = [];
+  
+  if (process.env.YOUTUBE_API_KEY) {
+    apiKeys.push(process.env.YOUTUBE_API_KEY);
+    console.log('✅ YOUTUBE_API_KEY eklendi (length:', process.env.YOUTUBE_API_KEY.length, ')');
+  }
+  
+  // Çoklu anahtar desteği
+  let i = 1;
+  while (process.env[`YOUTUBE_API_KEY_${i}`]) {
+    // Aynı key'i tekrar ekleme (deduplicate)
+    if (!apiKeys.includes(process.env[`YOUTUBE_API_KEY_${i}`])) {
+      apiKeys.push(process.env[`YOUTUBE_API_KEY_${i}`]);
+      console.log(`✅ YOUTUBE_API_KEY_${i} eklendi (length: ${process.env[`YOUTUBE_API_KEY_${i}`].length})`);
+    } else {
+      console.log(`⚠️  YOUTUBE_API_KEY_${i} zaten mevcut, atlandı`);
+    }
+    i++;
+  }
+  
+  console.log(`🔑 Toplam ${apiKeys.length} benzersiz API key bulundu`);
+  
+  if (apiKeys.length === 0) {
+    throw new Error('process.env\'de YouTube API anahtarı bulunamadı!');
+  }
+  
+  // Cache temizle ve yeni instance oluştur
+  console.log('🔄 Singleton sıfırlanıyor...');
+  const apiKeyManagerModule = require('../src/services/apiKeyManager');
+  apiKeyManagerModule.resetApiKeyManager();
+  
+  console.log('🔄 Yeni ApiKeyManager oluşturuluyor (API keys direkt parametre)...');
+  const manager = apiKeyManagerModule.getApiKeyManager(apiKeys);
+  
+  const stats = manager.getStats();
+  console.log('✅ ApiKeyManager başarıyla oluşturuldu');
+  console.log('   Stats:', stats);
+  
+  return manager;
+}
 
 let mainWindow;
 let analysisInProgress = false;
 let shouldStopAnalysis = false;
 
 /**
+ * Varsayılan config yapısı
+ */
+function getDefaultConfig() {
+  return {
+    apiKeys: [],
+    filters: {
+      minSubscribers: 10000,
+      maxSubscribers: 500000,
+      maxDaysSinceUpload: 30,
+      minVideoDuration: 3,
+      minVideoViews: 1000,
+      shortsThreshold: 60
+    },
+    discovery: {
+      regionCode: 'TR',
+      language: 'tr',
+      maxResults: 50
+    },
+    delays: {
+      betweenQueries: 5000,
+      betweenChannels: 1000,
+      afterApiError: 3000
+    },
+    games: [
+      'gta', 'gta5', 'valorant', 'cs2', 'minecraft', 'fortnite',
+      'apex legends', 'league of legends', 'lol', 'pubg',
+      'call of duty', 'fifa', 'roblox'
+    ],
+    searchQueries: 'gta 5 türkçe\nvalorant türkçe\ncs2 gameplay türkçe\nminecraft survival türkçe'
+  };
+}
+
+/**
+ * Config dosyasını validate et
+ */
+function validateConfig(config) {
+  try {
+    // Temel yapı kontrolü
+    if (!config || typeof config !== 'object') return false;
+    if (!Array.isArray(config.apiKeys)) return false;
+    if (!config.filters || typeof config.filters !== 'object') return false;
+    if (!config.discovery || typeof config.discovery !== 'object') return false;
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Config path'i al
+ */
+function getConfigPath() {
+  const userDataPath = app.getPath('userData');
+  // userData klasörünü oluştur (yoksa)
+  if (!fs.existsSync(userDataPath)) {
+    fs.mkdirSync(userDataPath, { recursive: true });
+  }
+  return path.join(userDataPath, 'config.json');
+}
+
+/**
  * Başlangıçta config'i yükle ve environment variables'ı set et
  */
 async function loadInitialConfig() {
+  const configPath = getConfigPath();
+  
+  console.log('==================== CONFIG INITIALIZATION ====================');
+  console.log('📂 Config path:', configPath);
+  console.log('🏠 User data path:', app.getPath('userData'));
+  console.log('🔧 Is development:', process.env.NODE_ENV === 'development');
+  console.log('📁 Config exists:', fs.existsSync(configPath));
+  
   try {
-    const configPath = path.join(app.getPath('userData'), 'config.json');
+    let settings = null;
     
+    // Config dosyası var mı?
     if (fs.existsSync(configPath)) {
+      console.log('📄 Config file found, reading...');
       const data = fs.readFileSync(configPath, 'utf8');
-      const settings = JSON.parse(data);
-      updateEnvironmentVariables(settings);
-      console.log('✅ Config yüklendi ve environment variables set edildi');
+      console.log('📄 Config file size:', data.length, 'bytes');
+      settings = JSON.parse(data);
+      console.log('📋 Loaded config keys:', Object.keys(settings));
+      console.log('🔑 API keys count:', settings.apiKeys?.length || 0);
+      console.log('🔑 First API key exists:', !!(settings.apiKeys?.[0]));
+      
+      // Validate et
+      if (!validateConfig(settings)) {
+        console.log('⚠️  Config structure invalid, creating default...');
+        fs.unlinkSync(configPath); // Hatalı config'i sil
+        settings = null;
+      }
     } else {
-      // Varsayılan olarak boş API key set et (hata vermemesi için)
-      process.env.YOUTUBE_API_KEY = '';
-      console.log('⚠️  Config dosyası bulunamadı, Settings sekmesinden API key ekleyin');
+      console.log('📄 Config file not found at:', configPath);
     }
+    
+    // Config yoksa veya hatalıysa, varsayılan oluştur
+    if (!settings) {
+      console.log('📝 Creating default config...');
+      settings = getDefaultConfig();
+      fs.writeFileSync(configPath, JSON.stringify(settings, null, 2));
+      console.log('✅ Default config created at:', configPath);
+    }
+    
+    // Environment variables'ı set et
+    console.log('🔧 Setting environment variables...');
+    updateEnvironmentVariables(settings);
+    
+    console.log('🔍 After update - YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? 'SET (hidden)' : 'NOT SET');
+    console.log('🔍 After update - YOUTUBE_API_KEY_1:', process.env.YOUTUBE_API_KEY_1 ? 'SET (hidden)' : 'NOT SET');
+    
+    if (settings.apiKeys && settings.apiKeys.length > 0 && settings.apiKeys[0]) {
+      console.log('✅ Config loaded successfully with API keys');
+    } else {
+      console.log('⚠️  Config loaded but NO API keys found');
+      console.log('⚠️  Please add API key in Settings tab');
+    }
+    console.log('===============================================================\n');
+    
   } catch (error) {
-    console.error('❌ Config yüklenirken hata:', error);
-    process.env.YOUTUBE_API_KEY = ''; // Fallback
+    console.error('❌ ERROR loading config:', error);
+    console.error('Stack:', error.stack);
+    // Hata durumunda varsayılan config oluştur
+    try {
+      const defaultConfig = getDefaultConfig();
+      fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
+      updateEnvironmentVariables(defaultConfig);
+      console.log('✅ Default config created after error');
+    } catch (createError) {
+      console.error('❌ FATAL: Cannot create default config:', createError);
+    }
   }
 }
 
@@ -104,44 +265,26 @@ app.on('activate', () => {
  */
 ipcMain.handle('load-settings', async () => {
   try {
-    const configPath = path.join(app.getPath('userData'), 'config.json');
+    const configPath = getConfigPath();
     
     if (fs.existsSync(configPath)) {
       const data = fs.readFileSync(configPath, 'utf8');
-      return JSON.parse(data);
+      const settings = JSON.parse(data);
+      
+      // Validate et
+      if (validateConfig(settings)) {
+        return settings;
+      } else {
+        console.log('⚠️  Config yapısı hatalı, varsayılan dönüyor');
+        return getDefaultConfig();
+      }
     }
     
-    // Varsayılan ayarlar
-    return {
-      apiKeys: [''],
-      filters: {
-        minSubscribers: 10000,
-        maxSubscribers: 500000,
-        maxDaysSinceUpload: 30,
-        minVideoDuration: 3,
-        minVideoViews: 1000,
-        shortsThreshold: 60
-      },
-      discovery: {
-        regionCode: 'TR',
-        language: 'tr',
-        maxResults: 50
-      },
-      delays: {
-        betweenQueries: 5000,
-        betweenChannels: 1000,
-        afterApiError: 3000
-      },
-      games: [
-        'gta', 'gta5', 'valorant', 'cs2', 'minecraft', 'fortnite',
-        'apex legends', 'league of legends', 'lol', 'pubg',
-        'call of duty', 'fifa', 'roblox'
-      ],
-      searchQueries: 'gta 5 türkçe\nvalorant türkçe\ncs2 gameplay türkçe\nminecraft survival türkçe'
-    };
+    // Config yoksa varsayılanı döndür
+    return getDefaultConfig();
   } catch (error) {
     console.error('Ayarlar yüklenirken hata:', error);
-    return null;
+    return getDefaultConfig();
   }
 });
 
@@ -149,16 +292,41 @@ ipcMain.handle('load-settings', async () => {
  * Ayarları kaydet
  */
 ipcMain.handle('save-settings', async (event, settings) => {
+  console.log('\n==================== SAVE SETTINGS ====================');
+  console.log('💾 Save settings called');
+  console.log('📊 Settings to save:', {
+    apiKeysCount: settings.apiKeys?.length || 0,
+    hasFilters: !!settings.filters,
+    hasDiscovery: !!settings.discovery,
+    hasDelays: !!settings.delays
+  });
+  
   try {
-    const configPath = path.join(app.getPath('userData'), 'config.json');
+    const configPath = getConfigPath();
+    console.log('📂 Config path:', configPath);
+    
+    // Validate et
+    if (!validateConfig(settings)) {
+      console.error('❌ Invalid config structure, not saving');
+      return { success: false, error: 'Geçersiz ayar yapısı' };
+    }
+    
+    console.log('✅ Config validation passed');
+    
     fs.writeFileSync(configPath, JSON.stringify(settings, null, 2));
+    console.log('💾 Config file written successfully');
     
     // Environment variables'ı güncelle
+    console.log('🔧 Updating environment variables after save...');
     updateEnvironmentVariables(settings);
+    
+    console.log('✅ Settings saved and env updated');
+    console.log('=======================================================\n');
     
     return { success: true };
   } catch (error) {
-    console.error('Ayarlar kaydedilirken hata:', error);
+    console.error('❌ Error saving settings:', error);
+    console.error('Stack:', error.stack);
     return { success: false, error: error.message };
   }
 });
@@ -167,20 +335,37 @@ ipcMain.handle('save-settings', async (event, settings) => {
  * Environment variables'ı güncelle
  */
 function updateEnvironmentVariables(settings) {
+  console.log('🔧 updateEnvironmentVariables called');
+  console.log('📊 Settings object:', {
+    hasApiKeys: !!settings.apiKeys,
+    apiKeysLength: settings.apiKeys?.length || 0,
+    hasFilters: !!settings.filters,
+    hasDiscovery: !!settings.discovery,
+    hasDelays: !!settings.delays
+  });
+  
   // API Keys - hem YOUTUBE_API_KEY_1, _2 hem de YOUTUBE_API_KEY set et
   if (settings.apiKeys && settings.apiKeys.length > 0) {
+    console.log('🔑 Processing API keys...');
+    
     // İlk key'i YOUTUBE_API_KEY olarak da set et (backward compatibility)
     const firstValidKey = settings.apiKeys.find(k => k && k.trim());
     if (firstValidKey) {
       process.env.YOUTUBE_API_KEY = firstValidKey;
+      console.log('✅ YOUTUBE_API_KEY set (length:', firstValidKey.length, ')');
+    } else {
+      console.log('⚠️  No valid API key found in array');
     }
     
     // Her key'i numaralı olarak set et
     settings.apiKeys.forEach((key, index) => {
       if (key && key.trim()) {
         process.env[`YOUTUBE_API_KEY_${index + 1}`] = key;
+        console.log(`✅ YOUTUBE_API_KEY_${index + 1} set (length: ${key.length})`);
       }
     });
+  } else {
+    console.log('⚠️  No API keys in settings');
   }
   
   // Filters - null check ekle
@@ -212,19 +397,56 @@ function updateEnvironmentVariables(settings) {
  * Analizi başlat
  */
 ipcMain.handle('start-analysis', async (event, queries) => {
+  console.log('\n==================== ANALYSIS START ====================');
+  console.log('🚀 Analysis requested');
+  console.log('📊 analysisInProgress:', analysisInProgress);
+  
   if (analysisInProgress) {
     return { success: false, error: 'Analiz zaten çalışıyor' };
   }
   
+  // Config'i tekrar yükle ve environment variables'ı güncelle
+  console.log('🔄 Reloading config before analysis...');
+  try {
+    const configPath = getConfigPath();
+    console.log('📂 Config path:', configPath);
+    console.log('📁 Config exists:', fs.existsSync(configPath));
+    
+    if (fs.existsSync(configPath)) {
+      const data = fs.readFileSync(configPath, 'utf8');
+      console.log('📄 Config data loaded, size:', data.length, 'bytes');
+      const settings = JSON.parse(data);
+      console.log('📋 Config parsed, keys:', Object.keys(settings));
+      console.log('🔑 API keys in config:', settings.apiKeys?.length || 0);
+      
+      updateEnvironmentVariables(settings);
+      console.log('✅ Config reloaded and env updated');
+    } else {
+      console.log('⚠️  Config file not found during analysis start');
+    }
+  } catch (error) {
+    console.error('❌ Error reloading config:', error);
+  }
+  
   // API key kontrolü
+  console.log('🔍 Checking API keys in environment...');
+  console.log('   YOUTUBE_API_KEY:', process.env.YOUTUBE_API_KEY ? 'SET (hidden)' : 'NOT SET');
+  console.log('   YOUTUBE_API_KEY_1:', process.env.YOUTUBE_API_KEY_1 ? 'SET (hidden)' : 'NOT SET');
+  console.log('   All YOUTUBE env vars:', Object.keys(process.env).filter(k => k.includes('YOUTUBE')));
+  
   if (!process.env.YOUTUBE_API_KEY && !process.env.YOUTUBE_API_KEY_1) {
+    console.log('❌ API KEY CHECK FAILED');
     sendLog('error', '❌ YouTube API anahtarı bulunamadı!');
     sendLog('warning', '⚠️  Lütfen Settings sekmesinden en az 1 API key ekleyin ve Kaydet butonuna tıklayın.');
+    console.log('========================================================\n');
     return { 
       success: false, 
       error: 'API anahtarı bulunamadı. Settings sekmesinden API key ekleyin.' 
     };
   }
+  
+  console.log('✅ API key check passed');
+  console.log('========================================================\n');
 
   analysisInProgress = true;
   shouldStopAnalysis = false; // Reset stop flag
@@ -232,8 +454,8 @@ ipcMain.handle('start-analysis', async (event, queries) => {
   try {
     sendLog('info', '🚀 Analiz başlatıldı...');
     
-    // API Key Manager bilgisini gönder
-    const apiKeyManager = getApiKeyManager();
+    // API Key Manager bilgisini gönder - Fresh instance al
+    const apiKeyManager = getFreshApiKeyManager();
     const stats = apiKeyManager.getStats();
     sendLog('info', `📌 API Anahtar Yöneticisi ${stats.totalKeys} anahtar ile başlatıldı`);
     

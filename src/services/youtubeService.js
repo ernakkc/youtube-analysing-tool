@@ -10,8 +10,11 @@ let youtube = null;
  * @returns {Object} - YouTube API client
  */
 function getYouTubeClient() {
+  console.log('🔍 [youtubeService] getYouTubeClient() çağrıldı');
   const apiKeyManager = getApiKeyManager();
+  console.log('🔍 [youtubeService] apiKeyManager alındı, stats:', apiKeyManager.getStats());
   const currentKey = apiKeyManager.getCurrentKey();
+  console.log('🔍 [youtubeService] currentKey alındı, length:', currentKey ? currentKey.length : 'null');
   
   // Create new client with current key
   youtube = google.youtube({

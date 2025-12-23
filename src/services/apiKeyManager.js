@@ -4,10 +4,23 @@ const { YOUTUBE_API_KEYS } = require('../config/constants');
  * API Anahtar Yöneticisi - Çoklu API anahtarlarının rotasyonunu yönetir
  */
 class ApiKeyManager {
-  constructor() {
-    this.keys = YOUTUBE_API_KEYS || [];
+  constructor(apiKeys = null) {
+    console.log('🔍 [ApiKeyManager] Constructor çağrıldı');
+    console.log('🔍 [ApiKeyManager] Parametre olarak gelen apiKeys:', apiKeys);
+    
+    // Önce parametre, sonra constants'tan oku
+    const keysToUse = apiKeys || YOUTUBE_API_KEYS || [];
+    
+    console.log('🔍 [ApiKeyManager] Kullanılacak keys:', keysToUse);
+    console.log('🔍 [ApiKeyManager] Keys array mi?:', Array.isArray(keysToUse));
+    console.log('🔍 [ApiKeyManager] Keys length:', keysToUse ? keysToUse.length : 'null/undefined');
+    
+    this.keys = Array.isArray(keysToUse) ? keysToUse : [];
     this.currentIndex = 0;
     this.failedKeys = new Set();
+    
+    console.log('🔍 [ApiKeyManager] this.keys:', this.keys);
+    console.log('🔍 [ApiKeyManager] this.keys.length:', this.keys.length);
     
     if (this.keys.length === 0) {
       console.error('❌ YouTube API anahtarı bulunamadı!');
@@ -103,11 +116,12 @@ let instance = null;
 module.exports = {
   /**
    * ApiKeyManager örneğini getir (singleton)
+   * @param {Array<string>} apiKeys - İsteğe bağlı API anahtarları dizisi
    * @returns {ApiKeyManager}
    */
-  getApiKeyManager: () => {
+  getApiKeyManager: (apiKeys = null) => {
     if (!instance) {
-      instance = new ApiKeyManager();
+      instance = new ApiKeyManager(apiKeys);
     }
     return instance;
   },
