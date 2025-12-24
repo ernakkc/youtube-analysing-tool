@@ -1,6 +1,13 @@
-const { FILTERS } = require('../config/constants');
 const { daysSince, parseDuration, secondsToMinutes, isShort } = require('../utils/helpers');
 const { getVideoDetails } = require('../services/youtubeService');
+
+/**
+ * Get fresh FILTERS object (bypasses any caching)
+ */
+function getFreshFilters() {
+  const constants = require('../config/constants');
+  return constants.FILTERS;
+}
 
 /**
  * Check if channel meets subscriber count requirements
@@ -8,6 +15,7 @@ const { getVideoDetails } = require('../services/youtubeService');
  * @returns {boolean} - Pass or fail
  */
 function checkSubscriberCount(subscriberCount) {
+  const FILTERS = getFreshFilters();
   return subscriberCount >= FILTERS.MIN_SUBSCRIBERS && 
          subscriberCount <= FILTERS.MAX_SUBSCRIBERS;
 }
@@ -18,6 +26,7 @@ function checkSubscriberCount(subscriberCount) {
  * @returns {boolean} - Pass or fail
  */
 function checkLastUploadDate(lastUploadDate) {
+  const FILTERS = getFreshFilters();
   const days = daysSince(lastUploadDate);
   return days <= FILTERS.MAX_DAYS_SINCE_UPLOAD;
 }
@@ -28,6 +37,7 @@ function checkLastUploadDate(lastUploadDate) {
  * @returns {Array} - Array of long videos
  */
 function filterLongVideos(videos) {
+  const FILTERS = getFreshFilters();
   return videos.filter(video => {
     const durationInSeconds = parseDuration(video.duration);
     const durationInMinutes = secondsToMinutes(durationInSeconds);
@@ -42,7 +52,7 @@ function filterLongVideos(videos) {
  */
 function hasTooManyShorts(videos) {
   if (videos.length === 0) return false;
-  
+  const FILTERS = getFreshFilters();
   const shortsCount = videos.filter(video => {
     const durationInSeconds = parseDuration(video.duration);
     return isShort(durationInSeconds);
@@ -56,8 +66,9 @@ function hasTooManyShorts(videos) {
  * Check if enough long videos meet view threshold
  * @param {Array} longVideos - Array of long video objects
  * @returns {boolean} - Pass or fail
- */
+ **/
 function checkVideoViews(longVideos) {
+  const FILTERS = getFreshFilters();
   const videosWithEnoughViews = longVideos.filter(
     video => video.viewCount >= FILTERS.MIN_VIDEO_VIEWS
   );
@@ -71,6 +82,7 @@ function checkVideoViews(longVideos) {
  * @returns {Object} - { pass: boolean, reasons: Array }
  */
 async function applyHardFilters(channelData) {
+  const FILTERS = getFreshFilters();
   const reasons = [];
   
   // Check subscriber count

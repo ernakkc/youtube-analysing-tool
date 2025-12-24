@@ -1,7 +1,15 @@
-const { SCORING, FILTERS } = require('../config/constants');
+const { SCORING } = require('../config/constants');
 const { daysSince } = require('../utils/helpers');
 const { filterLongVideos } = require('../filters/channelFilters');
 const { calculateViewRatio, hasGamingKeywords } = require('../analyzers/gameDetector');
+
+/**
+ * Get fresh FILTERS object
+ */
+function getFreshFilters() {
+  const constants = require('../config/constants');
+  return constants.FILTERS;
+}
 
 /**
  * Calculate view reliability score (30 points)
@@ -10,6 +18,7 @@ const { calculateViewRatio, hasGamingKeywords } = require('../analyzers/gameDete
  * @returns {number} - Score (0-30)
  */
 function calculateViewReliabilityScore(longVideos) {
+  const FILTERS = getFreshFilters();
   const videosWithViews = longVideos.filter(
     video => video.viewCount >= FILTERS.MIN_VIDEO_VIEWS
   ).length;

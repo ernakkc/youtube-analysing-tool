@@ -378,6 +378,15 @@ ipcMain.handle('start-analysis', async (event, queries) => {
     
     // Güncel filtre değerlerini logla
     const { FILTERS, DISCOVERY, DELAYS } = require('../src/config/constants');
+    console.log('🔍 DEBUG - Current process.env values:');
+    console.log('  MIN_SUBSCRIBERS:', process.env.MIN_SUBSCRIBERS);
+    console.log('  MAX_SUBSCRIBERS:', process.env.MAX_SUBSCRIBERS);
+    console.log('  MIN_VIDEO_VIEWS:', process.env.MIN_VIDEO_VIEWS);
+    console.log('🔍 DEBUG - FILTERS object values:');
+    console.log('  MIN_SUBSCRIBERS:', FILTERS.MIN_SUBSCRIBERS);
+    console.log('  MAX_SUBSCRIBERS:', FILTERS.MAX_SUBSCRIBERS);
+    console.log('  MIN_VIDEO_VIEWS:', FILTERS.MIN_VIDEO_VIEWS);
+    
     sendLog('info', `📌 Filtreler: ${FILTERS.MIN_SUBSCRIBERS}-${FILTERS.MAX_SUBSCRIBERS} abone, max ${FILTERS.MAX_DAYS_SINCE_UPLOAD} gün, min ${FILTERS.MIN_VIDEO_VIEWS} görüntüleme`);
     sendLog('info', `📌 Keşif: ${DISCOVERY.DEFAULT_REGION_CODE}/${DISCOVERY.DEFAULT_LANGUAGE}, max ${DISCOVERY.MAX_RESULTS_PER_QUERY} sonuç`);
     
