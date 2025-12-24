@@ -270,7 +270,14 @@ ipcMain.handle('save-settings', async (event, settings) => {
     // Environment variables'ı güncelle
     updateEnvironmentVariables(settings);
     
+    // Güncel değerleri logla (Debug için)
     console.log('✅ Settings saved successfully');
+    console.log('📌 Updated filters:', {
+      minSub: process.env.MIN_SUBSCRIBERS,
+      maxSub: process.env.MAX_SUBSCRIBERS,
+      maxDays: process.env.MAX_DAYS_SINCE_UPLOAD,
+      minViews: process.env.MIN_VIDEO_VIEWS
+    });
     
     return { success: true };
   } catch (error) {
@@ -369,6 +376,11 @@ ipcMain.handle('start-analysis', async (event, queries) => {
   try {
     sendLog('info', '🚀 Analiz başlatıldı...');
     
+    // Güncel filtre değerlerini logla
+    const { FILTERS, DISCOVERY, DELAYS } = require('../src/config/constants');
+    sendLog('info', `📌 Filtreler: ${FILTERS.MIN_SUBSCRIBERS}-${FILTERS.MAX_SUBSCRIBERS} abone, max ${FILTERS.MAX_DAYS_SINCE_UPLOAD} gün, min ${FILTERS.MIN_VIDEO_VIEWS} görüntüleme`);
+    sendLog('info', `📌 Keşif: ${DISCOVERY.DEFAULT_REGION_CODE}/${DISCOVERY.DEFAULT_LANGUAGE}, max ${DISCOVERY.MAX_RESULTS_PER_QUERY} sonuç`);
+    
     // API Key Manager bilgisini gönder - Fresh instance al
     const apiKeyManager = getFreshApiKeyManager();
     const stats = apiKeyManager.getStats();
@@ -441,7 +453,25 @@ ipcMain.handle('start-analysis', async (event, queries) => {
     return { success: true, processed: processedCount, passed: passedCount };
     
   } catch (error) {
-    sendLog('error', `❌ Hata: ${error.message}`);
+    // Quota hatası özel durumu
+    if (error.message.includes('TÜM API ANAHTARLARI TÜKENDİ') || error.message.includes('All API keys exhausted')) {
+      sendLog('error', '❌ TÜM API ANAHTARLARI TÜKENDİ');
+      sendLog('error', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      sendLog('warning', '📊 YouTube API Günlük Kota: 10,000 birim/anahtar');
+      sendLog('info', '');
+      sendLog('info', '💡 ÇÖZÜMLER:');
+      sendLog('info', '   1️⃣ Yarın tekrar deneyin (00:00 PST\'de sıfırlanır)');
+      sendLog('info', '   2️⃣ Settings\'den daha fazla API key ekleyin');
+      sendLog('info', '   3️⃣ Arama sorgularını azaltın veya spesifik yapın');
+      sendLog('info', '   4️⃣ Delay sürelerini artırarak kota tasarrufu yapın');
+      sendLog('info', '');
+      sendLog('info', '🔗 Yeni API key almak için:');
+      sendLog('info', '   https://console.cloud.google.com/apis/credentials');
+      sendLog('error', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    } else {
+      sendLog('error', `❌ Hata: ${error.message}`);
+    }
+    
     analysisInProgress = false;
     return { success: false, error: error.message };
   }

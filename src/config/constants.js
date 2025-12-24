@@ -32,31 +32,37 @@ module.exports = {
   // Veritabanı
   DB_PATH: process.env.DB_PATH || './data/channels.json',
   
-  // Filtre eşikleri
-  FILTERS: {
-    MIN_SUBSCRIBERS: parseInt(process.env.MIN_SUBSCRIBERS) || 10000,
-    MAX_SUBSCRIBERS: parseInt(process.env.MAX_SUBSCRIBERS) || 500000,
-    MAX_DAYS_SINCE_UPLOAD: parseInt(process.env.MAX_DAYS_SINCE_UPLOAD) || 30,
-    MIN_VIDEO_DURATION_MINUTES: parseInt(process.env.MIN_VIDEO_DURATION_MINUTES) || 3,
-    MIN_VIDEO_VIEWS: parseInt(process.env.MIN_VIDEO_VIEWS) || 1000,
-    SHORTS_DURATION_SECONDS: 60,
-    SHORTS_THRESHOLD_PERCENTAGE: parseInt(process.env.SHORTS_THRESHOLD_PERCENTAGE) || 60,
-    MIN_LONG_VIDEOS_WITH_VIEWS: 4,
-    TOTAL_VIDEOS_TO_CHECK: 6
+  // Filtre eşikleri - Dinamik getter ile her erişimde güncel değerleri al
+  get FILTERS() {
+    return {
+      MIN_SUBSCRIBERS: parseInt(process.env.MIN_SUBSCRIBERS) || 10000,
+      MAX_SUBSCRIBERS: parseInt(process.env.MAX_SUBSCRIBERS) || 500000,
+      MAX_DAYS_SINCE_UPLOAD: parseInt(process.env.MAX_DAYS_SINCE_UPLOAD) || 30,
+      MIN_VIDEO_DURATION_MINUTES: parseInt(process.env.MIN_VIDEO_DURATION_MINUTES) || 3,
+      MIN_VIDEO_VIEWS: parseInt(process.env.MIN_VIDEO_VIEWS) || 1000,
+      SHORTS_DURATION_SECONDS: 60,
+      SHORTS_THRESHOLD_PERCENTAGE: parseInt(process.env.SHORTS_THRESHOLD_PERCENTAGE) || 60,
+      MIN_LONG_VIDEOS_WITH_VIEWS: 4,
+      TOTAL_VIDEOS_TO_CHECK: 6
+    };
   },
   
-  // Keşif ayarları
-  DISCOVERY: {
-    DEFAULT_REGION_CODE: process.env.DEFAULT_REGION_CODE || 'TR',
-    DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE || 'tr',
-    MAX_RESULTS_PER_QUERY: parseInt(process.env.MAX_RESULTS_PER_QUERY) || 50
+  // Keşif ayarları - Dinamik getter
+  get DISCOVERY() {
+    return {
+      DEFAULT_REGION_CODE: process.env.DEFAULT_REGION_CODE || 'TR',
+      DEFAULT_LANGUAGE: process.env.DEFAULT_LANGUAGE || 'tr',
+      MAX_RESULTS_PER_QUERY: parseInt(process.env.MAX_RESULTS_PER_QUERY) || 50
+    };
   },
   
-  // Bekleme süreleri (milisaniye)
-  DELAYS: {
-    BETWEEN_QUERIES: parseInt(process.env.DELAY_BETWEEN_QUERIES) || 5000,     // Sorgular arası (varsayılan: 5 saniye)
-    BETWEEN_CHANNELS: parseInt(process.env.DELAY_BETWEEN_CHANNELS) || 1000,   // Kanallar arası (varsayılan: 1 saniye)
-    AFTER_API_ERROR: parseInt(process.env.DELAY_AFTER_API_ERROR) || 3000      // API hatası sonrası (varsayılan: 3 saniye)
+  // Bekleme süreleri (milisaniye) - Dinamik getter
+  get DELAYS() {
+    return {
+      BETWEEN_QUERIES: parseInt(process.env.DELAY_BETWEEN_QUERIES) || 5000,     // Sorgular arası (varsayılan: 5 saniye)
+      BETWEEN_CHANNELS: parseInt(process.env.DELAY_BETWEEN_CHANNELS) || 1000,   // Kanallar arası (varsayılan: 1 saniye)
+      AFTER_API_ERROR: parseInt(process.env.DELAY_AFTER_API_ERROR) || 3000      // API hatası sonrası (varsayılan: 3 saniye)
+    };
   },
   
   // Oyun anahtar kelimeleri

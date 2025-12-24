@@ -48,11 +48,19 @@ async function executeWithRetry(apiCall, operationName = 'API call') {
       
       // If this was the last key, throw error
       if (apiKeyManager.getStats().remainingKeys === 0) {
-        throw new Error(`All API keys exhausted for ${operationName}: ${error.message}`);
+        const stats = apiKeyManager.getStats();
+        throw new Error(
+          `🚫 TÜM API ANAHTARLARI TÜKENDİ (${stats.totalKeys}/${stats.totalKeys})\n` +
+          `YouTube API günlük kotası: 10,000 birim/anahtar\n` +
+          `Çözümler:\n` +
+          `  1. Yarın tekrar deneyin (quota her gün 00:00 PST'de sıfırlanır)\n` +
+          `  2. Settings'den daha fazla API key ekleyin\n` +
+          `  3. Arama sorgularını azaltın veya daha spesifik yapın`
+        );
       }
       
       // Otherwise, retry with next key
-      console.log(`🔄 Retrying ${operationName} with new key...`);
+      console.log(`🔄 Retrying ${operationName} with next key...`);
     }
   }
   

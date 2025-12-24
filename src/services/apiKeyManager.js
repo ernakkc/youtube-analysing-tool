@@ -61,15 +61,20 @@ class ApiKeyManager {
     const isQuotaError = 
       errorMessage.includes('quotaExceeded') ||
       errorMessage.includes('quota') ||
+      errorMessage.includes('exceeded your') ||
       error.code === 403;
     
     if (isQuotaError) {
-      console.log(`❌ API Anahtarı ${this.currentIndex + 1} kotası aşıldı. Değiştiriliyor...`);
+      console.log(`❌ API Anahtarı #${this.currentIndex + 1} kotası aşıldı (günlük limit: 10,000 birim)`);
       this.failedKeys.add(this.currentIndex);
       this.currentIndex = (this.currentIndex + 1) % this.keys.length;
       
       const remainingKeys = this.keys.length - this.failedKeys.size;
-      console.log(`🔄 API Anahtarı ${this.currentIndex + 1}'e geçildi. Kalan anahtar: ${remainingKeys}`);
+      if (remainingKeys > 0) {
+        console.log(`🔄 API Anahtarı #${this.currentIndex + 1}'e geçildi. Kalan: ${remainingKeys}/${this.keys.length}`);
+      } else {
+        console.log(`⚠️  TÜM API ANAHTARLARI TÜKENDİ (${this.keys.length}/${this.keys.length})`);
+      }
       
       return true; // Rotasyon başarılı
     }
