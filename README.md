@@ -446,7 +446,7 @@ MIT Lisansı. Detaylar için `LICENSE` dosyasına bakın.
 
 ---
 
-**Made with ❤️ for Turkish Gaming Community**
+**Made with ❤️ for Turkish Gaming Communities**
 
 ## Çıktı Formatı (DB / JSON)
 
